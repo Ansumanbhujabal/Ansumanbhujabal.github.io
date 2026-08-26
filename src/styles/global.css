@@ -6,6 +6,7 @@
 :root{
   --bg:#f6f6ef; --sf:#ffffff; --sf2:#faf9f2; --bd:#dddddd; --bd2:#e8e8e0;
   --tx:#1a1a1a; --mu:#666660; --dim:#6b6b65; --ac:#b84700; --acs:rgba(184,71,0,.08);
+  --num:#a0a0a0;
   --fd:'Unica One',Impact,'Arial Narrow',sans-serif;
   --fb:'Supreme',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
   --fm:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
@@ -13,6 +14,7 @@
 :root[data-theme="dark"]{
   --bg:#0d1117; --sf:#161b22; --sf2:#1c2129; --bd:#30363d; --bd2:#21262d;
   --tx:#e6edf3; --mu:#8b949e; --dim:#7d8590; --ac:#70d100; --acs:rgba(112,209,0,.10);
+  --num:#606060;
 }
 html{background:var(--bg)}
 *{box-sizing:border-box}
@@ -25,8 +27,9 @@ section{padding:clamp(3.4rem,8vw,5.5rem) 0;border-bottom:1px solid var(--bd2)}
 .sh{margin-bottom:2.6rem}
 h2{font-size:clamp(1.9rem,4.6vw,3rem);margin:.75rem 0 .8rem}
 .sh p{color:var(--mu);max-width:52ch;margin:0;font-size:.98rem}
-.btn{background:var(--ac);color:#0b1000;font-weight:700;font-size:.85rem;padding:.5rem 1.05rem;border-radius:2px;transition:.15s;display:inline-block}
+.btn{background:var(--ac);color:#fff;font-weight:700;font-size:.85rem;padding:.5rem 1.05rem;border-radius:2px;transition:.15s;display:inline-block}
 .btn:hover{filter:brightness(1.12)}
+:root[data-theme="dark"] .btn{color:#0b1000}
 .ghost{border:1px solid var(--bd);padding:.5rem 1.05rem;border-radius:2px;font-size:.85rem;color:var(--mu);transition:.15s;display:inline-block}
 .ghost:hover{border-color:var(--ac);color:var(--tx)}
 nav{position:sticky;top:0;z-index:20;background:rgba(246,246,239,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd2)}
@@ -90,7 +93,7 @@ footer{padding:2.2rem 0 3rem}
 .pc:hover .pc-art{color:var(--tx)}
 .art{width:100%;height:auto;max-height:5.4rem;display:block}
 .pc-head{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;margin-bottom:.6rem}
-.pc-no{font-family:var(--fd);font-size:1.5rem;color:var(--bd);line-height:1}
+.pc-no{font-family:var(--fd);font-size:1.5rem;color:var(--num);line-height:1}
 .pc:hover .pc-no{color:var(--ac)}
 .pc h3{font-size:1.02rem;margin:0;font-weight:600}
 .pc-story{margin:0 0 .7rem;font-size:.85rem;line-height:1.6;color:var(--tx)}
