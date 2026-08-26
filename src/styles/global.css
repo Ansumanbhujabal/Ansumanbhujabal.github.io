@@ -24,3 +24,56 @@ h2{font-size:clamp(1.9rem,4.6vw,3rem);margin:.75rem 0 .8rem}
 .btn:hover{filter:brightness(1.12)}
 .ghost{border:1px solid var(--bd);padding:.5rem 1.05rem;border-radius:2px;font-size:.85rem;color:var(--mu);transition:.15s;display:inline-block}
 .ghost:hover{border-color:var(--ac);color:var(--tx)}
+nav{position:sticky;top:0;z-index:20;background:rgba(13,17,23,.86);backdrop-filter:blur(10px);border-bottom:1px solid var(--bd2)}
+.nv{display:flex;align-items:center;justify-content:space-between;height:4rem}
+.brand{font-family:var(--fd);font-size:1.32rem;text-transform:uppercase;letter-spacing:.02em}
+.nlinks{display:flex;gap:1.7rem;align-items:center}
+.nlinks a{font-size:.86rem;color:var(--mu)}
+.nlinks a:hover{color:var(--tx)}
+@media(max-width:44rem){.nlinks a.hide{display:none}}
+.hero{padding:clamp(4rem,11vw,7.5rem) 0 clamp(3rem,7vw,4.5rem);border-bottom:1px solid var(--bd2)}
+h1{font-size:clamp(2.9rem,8.4vw,6.1rem);margin:1.1rem 0 1.4rem;max-width:19ch}
+h1 span{color:var(--ac)}
+.lead{font-size:clamp(1rem,2vw,1.14rem);color:var(--mu);max-width:44ch;margin:0 0 2rem;line-height:1.65}
+.lead b{color:var(--tx);font-weight:500}
+.hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
+.live{border-bottom:1px solid var(--bd2);background:var(--sf)}
+.lv{display:flex;gap:2rem;flex-wrap:wrap;padding:.75rem 0;font-family:var(--fm);font-size:.73rem;color:var(--mu)}
+.lv b{color:var(--ac);font-weight:400;letter-spacing:.14em;text-transform:uppercase;font-size:.66rem;margin-right:.55rem}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+@media(max-width:52rem){.cards{grid-template-columns:1fr}}
+.card{background:var(--sf);border:1px solid var(--bd);border-radius:3px;padding:1.5rem 1.4rem;transition:.18s}
+.card:hover{border-color:var(--ac);background:var(--sf2)}
+.card .n{font-family:var(--fd);font-size:2.1rem;color:var(--ac);line-height:1;margin-bottom:.55rem}
+.card h3{font-size:1.02rem;margin:0 0 .5rem;font-weight:600}
+.card p{margin:0;color:var(--mu);font-size:.9rem;line-height:1.6}
+.step{display:grid;grid-template-columns:6.5rem 1fr;gap:1.6rem;padding:1.9rem 0;border-top:1px solid var(--bd2)}
+.step:first-of-type{border-top:0;padding-top:.4rem}
+@media(max-width:44rem){.step{grid-template-columns:1fr;gap:.5rem}}
+.step .num{font-family:var(--fd);font-size:3.1rem;color:var(--bd);line-height:.9}
+.step:hover .num{color:var(--ac)}
+.step .ttl{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin-bottom:.45rem}
+.step h3{font-size:1.3rem;margin:0;font-weight:600}
+.step p{margin:0;color:var(--mu);font-size:.95rem;max-width:62ch;line-height:1.65}
+.pill{font-family:var(--fm);font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--bd);color:var(--dim);padding:.13rem .45rem;border-radius:2px}
+.pill.on{color:var(--ac);border-color:var(--ac);background:var(--acs)}
+.met{font-family:var(--fm);color:var(--tx);font-size:.87rem}
+.lk{margin-top:.7rem;display:flex;gap:1.2rem;flex-wrap:wrap;font-family:var(--fm);font-size:.7rem;letter-spacing:.1em;text-transform:uppercase}
+.lk a{color:var(--dim);border-bottom:1px solid var(--bd)}
+.lk a:hover{color:var(--ac);border-color:var(--ac)}
+.log{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem}
+@media(max-width:52rem){.log{grid-template-columns:1fr}}
+.li{background:var(--sf);border:1px solid var(--bd2);border-left:2px solid var(--ac);border-radius:2px;padding:1.05rem 1.2rem}
+.li .m{font-family:var(--fm);font-size:.66rem;letter-spacing:.13em;text-transform:uppercase;color:var(--dim);margin-bottom:.4rem;display:flex;gap:.7rem}
+.li .m i{color:var(--ac);font-style:normal}
+.li h4{margin:0 0 .3rem;font-size:.98rem;font-weight:600}
+.li p{margin:0;color:var(--mu);font-size:.88rem;line-height:1.58}
+.cta{padding:clamp(3.4rem,8vw,5rem) 0;border-bottom:1px solid var(--bd2)}
+.cta-box{background:var(--sf);border:1px solid var(--bd);border-radius:3px;padding:clamp(1.8rem,4vw,3rem);display:flex;justify-content:space-between;align-items:center;gap:1.6rem;flex-wrap:wrap}
+.cta-box h2{margin:0 0 .5rem}
+.cta-box p{margin:0;color:var(--mu);max-width:46ch;font-size:.96rem}
+footer{padding:2.2rem 0 3rem}
+.ft{display:flex;justify-content:space-between;gap:1.4rem;flex-wrap:wrap;font-family:var(--fm);font-size:.72rem;color:var(--dim)}
+.ft a{color:var(--mu)}
+.ft a:hover{color:var(--ac)}
+.ft .set{display:flex;gap:1.4rem;flex-wrap:wrap}

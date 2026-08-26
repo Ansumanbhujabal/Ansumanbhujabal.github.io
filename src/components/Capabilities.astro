@@ -1,0 +1,23 @@
+---
+const cards = [
+  { n: '01', h: 'Adversarial Evaluation', p: 'Test suites built to break my own systems. A 229-case adversarial harness, injection and jailbreak resistance measured rather than assumed, LLM-as-judge with calibrated confidence.' },
+  { n: '02', h: 'Retrieval That Holds Up', p: 'Hybrid dense and BM25 retrieval with rank fusion, deterministic guardrail layers, grounded answers with per-query cost tracing. Built for documents where a wrong number is a real failure.' },
+  { n: '03', h: 'Agent Infrastructure', p: 'Containerised agents, MCP tool surfaces, credential gateways with per-request secret injection, and human-in-the-loop approval for anything that touches a real credential.' },
+];
+---
+<section><div class="c">
+  <div class="sh">
+    <span class="eyebrow">What I do</span>
+    <h2 class="disp">Three Things,<br>Done Properly</h2>
+    <p>Most agent demos work once. The interesting engineering is everything that happens after that.</p>
+  </div>
+  <div class="cards">
+    {cards.map(c => (
+      <div class="card">
+        <div class="n disp">{c.n}</div>
+        <h3>{c.h}</h3>
+        <p>{c.p}</p>
+      </div>
+    ))}
+  </div>
+</div></section>

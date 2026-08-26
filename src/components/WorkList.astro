@@ -1,0 +1,35 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { projects: CollectionEntry<'projects'>[] }
+const { projects } = Astro.props;
+const pad = (n: number) => String(n).padStart(2, '0');
+const LIVE = new Set(['live', 'running', 'early access']);
+---
+{projects.length > 0 && (
+<section id="work"><div class="c">
+  <div class="sh">
+    <span class="eyebrow">Selected work</span>
+    <h2 class="disp">Things I Built<br>And Shipped</h2>
+    <p>Every one of these has either real users, a live demo, or a review that found something I missed.</p>
+  </div>
+  {projects.map(p => (
+    <div class="step">
+      <div class="num disp">{pad(p.data.order)}</div>
+      <div>
+        <div class="ttl">
+          <h3>{p.data.name}</h3>
+          <span class={LIVE.has(p.data.status) ? 'pill on' : 'pill'}>{p.data.status}</span>
+        </div>
+        <p>{p.data.summary}</p>
+        {p.data.metrics && p.data.metrics.length > 0 && (
+          <p><span class="met">{p.data.metrics.join(' · ')}</span></p>
+        )}
+        <div class="lk">
+          {p.data.repo && <a href={p.data.repo}>Repository</a>}
+          {p.data.demo && <a href={p.data.demo}>Live demo</a>}
+        </div>
+      </div>
+    </div>
+  ))}
+</div></section>
+)}
