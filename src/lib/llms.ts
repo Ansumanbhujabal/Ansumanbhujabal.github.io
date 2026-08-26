@@ -14,7 +14,6 @@ export function buildLlmsTxt(projects: LlmsProject[]): string {
     '- Role: AI Engineer',
     '- Focus: agentic systems, RAG, LLM evaluation, adversarial testing, Model Context Protocol, AI security, AIOps',
     '- Location: Hyderabad, India',
-    '- Education: B.Tech Computer Science and Engineering, Parala Maharaja Engineering College',
     '- Contact: ansumanbhujabal1@gmail.com',
     '- Site: https://ansumanbhujabal.github.io',
     '- GitHub: https://github.com/Ansumanbhujabal',

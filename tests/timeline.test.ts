@@ -25,15 +25,11 @@ describe('career timeline', () => {
     expect(html).toContain('Feb 2025 — Present');
     expect(html).toContain('May 2024 — Jan 2025');
   });
-  it('omits education from the visible page', () => {
-    // Scoped to <body> — the pre-existing JSON-LD Person schema in the <head>
-    // (src/layouts/Base.astro, out of scope for this task) intentionally
-    // retains alumniOf for machine-readable/SEO purposes, same as llms.txt.
-    // The requirement here is that no human-visible page content mentions it.
-    const body = html.slice(html.indexOf('<body>'));
-    expect(body).not.toContain('Parala Maharaja');
-    expect(body).not.toMatch(/B\.?Tech/i);
-    expect(body).not.toContain('SGPA');
+  it('omits education from the page entirely, including machine-readable metadata', () => {
+    expect(html).not.toContain('Parala Maharaja');
+    expect(html).not.toMatch(/B\.?Tech/i);
+    expect(html).not.toContain('SGPA');
+    expect(html).not.toContain('alumniOf');
   });
   it('shows exactly the five intended entries and nothing else', () => {
     // Asserted positively on purpose: naming excluded employers in a test
