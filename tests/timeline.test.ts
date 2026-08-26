@@ -36,7 +36,9 @@ describe('career timeline', () => {
     expect(body).not.toContain('SGPA');
   });
   it('shows exactly the five intended entries and nothing else', () => {
-    expect((html.match(/class=\"tl-i\"/g) ?? []).length).toBe(5);
+    // Asserted positively on purpose: naming excluded employers in a test
+    // would publish them in this repo, defeating the exclusion.
+    expect((html.match(/class="tl-i"/g) ?? []).length).toBe(5);
   });
   it('appears above the capabilities section', () => {
     expect(html.indexOf('id="timeline"')).toBeGreaterThan(-1);
