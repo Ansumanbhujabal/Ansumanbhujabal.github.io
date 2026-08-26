@@ -50,4 +50,23 @@ describe('rendered page', () => {
     const internal = anchors.filter(a => /href="(#|mailto:)/.test(a));
     for (const a of internal) expect(a).not.toContain('target="_blank"');
   });
+  it('shows no status pills on project cards', () => {
+    expect(html).not.toContain('class="pill');
+  });
+  it('makes the wordmark a to-top link', () => {
+    expect(html).toMatch(/<a[^>]*class="brand"[^>]*href="#top"/);
+    expect(html).toContain('id="top"');
+  });
+  it('lays the projects out five per row', () => {
+    const css = readFileSync('src/styles/global.css', 'utf8');
+    expect(css).toContain('grid-template-columns:repeat(5,1fr)');
+  });
+  it('does not pitch a seniority level', () => {
+    expect(html.toLowerCase()).not.toContain('senior');
+  });
+  it('names the roles being sought', () => {
+    for (const r of ['AI Architect', 'AI Safety Engineer', 'generalist']) {
+      expect(html).toContain(r);
+    }
+  });
 });

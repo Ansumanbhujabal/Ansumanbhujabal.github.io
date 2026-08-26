@@ -12,9 +12,9 @@ describe('career timeline', () => {
   it('no longer renders the removed Parasyte log entry', () => {
     expect(html).not.toContain('Parasyte');
   });
-  it('lays the projects out four per row on wide screens', () => {
+  it('lays the projects out five per row on wide screens', () => {
     const css = readFileSync('src/styles/global.css', 'utf8');
-    expect(css).toContain('.grid{display:grid;grid-template-columns:repeat(4,1fr)');
+    expect(css).toContain('.grid{display:grid;grid-template-columns:repeat(5,1fr)');
   });
   it('renders every role', () => {
     for (const o of ['BlueDot Impact','Anyfeast','Stealth Browser AI Startup','Stealth AI Healthtech Startup','Invest4Edu']) {
