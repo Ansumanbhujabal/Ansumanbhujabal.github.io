@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+interface Props { entries: CollectionEntry<'timeline'>[] }
+const { entries } = Astro.props;
+---
+{entries.length > 0 && (
+<section id="timeline"><div class="c">
+  <div class="sh">
+    <span class="eyebrow">Track record</span>
+    <h2 class="disp">Where I've<br>Been Working</h2>
+    <p>Startups, mostly stealth, mostly remote. Shipping into production rather than writing about it.</p>
+  </div>
+  <ol class="tl">
+    {entries.map(e => (
+      <li class="tl-i">
+        <span class="tl-p">{e.data.period}</span>
+        <div class="tl-b">
+          <h3>{e.data.org}</h3>
+          <span class="tl-r">{e.data.role}</span>
+          {e.data.note && <p>{e.data.note}</p>}
+        </div>
+      </li>
+    ))}
+  </ol>
+</div></section>
+)}
