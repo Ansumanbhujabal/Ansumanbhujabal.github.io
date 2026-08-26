@@ -11,7 +11,7 @@ export function buildLlmsTxt(projects: LlmsProject[]): string {
     '',
     '## Profile',
     '',
-    '- Role: AI Engineer',
+    '- Role: AI Engineer (CTO)',
     '- Focus: agentic systems, RAG, LLM evaluation, adversarial testing, Model Context Protocol, AI security, AIOps',
     '- Location: Hyderabad, India',
     '- Contact: ansumanbhujabal1@gmail.com',

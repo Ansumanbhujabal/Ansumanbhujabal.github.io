@@ -14,7 +14,7 @@ describe('machine-readable surfaces', () => {
     expect(m).not.toBeNull();
     const ld = JSON.parse(m![1]);
     expect(ld['@type']).toBe('Person');
-    expect(ld.jobTitle).toBe('AI Engineer');
+    expect(ld.jobTitle).toBe('AI Engineer (CTO)');
     expect(ld.knowsAbout).toContain('Model Context Protocol');
   });
   it('emits llms.txt, robots.txt, sitemap and resume', () => {
@@ -33,5 +33,13 @@ describe('machine-readable surfaces', () => {
     const d = html.match(/<meta name="description" content="([^"]*)"/)![1];
     expect(d.toLowerCase()).not.toContain('anime');
     expect(d).toContain('AI engineer');
+  });
+  it('gives the same job title on the rendered page, in JSON-LD, and in llms.txt', () => {
+    const title = 'AI Engineer (CTO)';
+    expect(html).toContain(title);
+    const ld = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)![1]);
+    expect(ld.jobTitle).toBe(title);
+    const llmsTxt = readFileSync('dist/llms.txt', 'utf8');
+    expect(llmsTxt).toContain(`Role: ${title}`);
   });
 });
