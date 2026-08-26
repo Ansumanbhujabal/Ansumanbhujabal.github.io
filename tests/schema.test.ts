@@ -1,4 +1,5 @@
 import { describe, it, expect } from 'vitest';
+import { readFileSync } from 'node:fs';
 import { z } from 'zod';
 
 const projectSchema = z.object({
@@ -28,5 +29,13 @@ describe('projectSchema', () => {
     expect(projectSchema.safeParse({
       name: 'X', order: 1, status: 'live', summary: 'x', ghRepo: 'not-a-repo',
     }).success).toBe(false);
+  });
+});
+
+describe('schema drift', () => {
+  it('keeps content.config.ts statuses in sync with the test schema', () => {
+    const src = readFileSync('src/content.config.ts', 'utf8');
+    expect(src).toContain("z.enum(['live', 'running', 'research', 'shipped', 'early access'])");
+    expect(src).toContain("z.enum(['read', 'built', 'learned', 'watched'])");
   });
 });
