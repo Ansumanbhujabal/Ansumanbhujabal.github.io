@@ -4,7 +4,6 @@ import ProjectArt from './ProjectArt.astro';
 interface Props { projects: CollectionEntry<'projects'>[] }
 const { projects } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, '0');
-const LIVE = new Set(['live', 'running', 'early access']);
 const slugOf = (name: string) =>
   name.toLowerCase().startsWith('polly') ? 'polly'
   : name.toLowerCase().startsWith('ultradoc') ? 'ultradoc'
@@ -13,7 +12,7 @@ const slugOf = (name: string) =>
   : 'pulse';
 ---
 {projects.length > 0 && (
-<section id="work"><div class="c">
+<section id="work"><div class="c-wide">
   <div class="sh">
     <span class="eyebrow">Selected work</span>
     <h2 class="disp">Things I Built<br>And Shipped</h2>
@@ -26,7 +25,6 @@ const slugOf = (name: string) =>
         <div class="pc-head">
           <span class="pc-no">{pad(p.data.order)}</span>
           <h3>{p.data.name}</h3>
-          <span class={LIVE.has(p.data.status) ? 'pill on' : 'pill'}>{p.data.status}</span>
         </div>
         {p.data.story && <p class="pc-story">{p.data.story}</p>}
         <p class="pc-sum">{p.data.summary}</p>

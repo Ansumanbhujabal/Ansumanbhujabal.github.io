@@ -30,4 +30,7 @@ describe('buildLlmsTxt', () => {
     expect(out.toLowerCase()).not.toContain('anilist');
     expect(out.toLowerCase()).not.toContain('manga');
   });
+  it('does not pitch a seniority level', () => {
+    expect(out.toLowerCase()).not.toContain('senior');
+  });
 });

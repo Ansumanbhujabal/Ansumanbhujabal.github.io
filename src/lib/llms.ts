@@ -7,7 +7,7 @@ export function buildLlmsTxt(projects: LlmsProject[]): string {
   const lines: string[] = [
     '# Ansuman SS Bhujabala',
     '',
-    '> AI Engineer specialising in agentic systems, retrieval-augmented generation, and LLM evaluation. Based in Hyderabad, India. Open to senior AI engineering roles, remote or relocating.',
+    '> AI Engineer working on agentic systems, retrieval-augmented generation, and LLM evaluation. Based in Hyderabad, India. Open to AI Engineer, AI Architect, AI Safety Engineer, and generalist roles — remote or relocating.',
     '',
     '## Profile',
     '',
