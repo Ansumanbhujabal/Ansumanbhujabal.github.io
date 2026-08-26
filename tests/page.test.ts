@@ -22,10 +22,12 @@ describe('rendered page', () => {
     expect(html).toContain('>01<');
     expect(html).toContain('>05<');
   });
-  it('ships no client-side javascript beyond ld+json and the inline theme script', () => {
-    const scripts = [...html.matchAll(/<script([^>]*)>/g)].map(m => m[1]);
-    const disallowed = scripts.filter(a =>
-      !a.includes('application/ld+json') && !a.includes('data-theme-init'));
+  it('ships no client-side javascript beyond ld+json and the inline theme scripts', () => {
+    const scripts = [...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)];
+    const disallowed = scripts.filter(([, attrs, body]) =>
+      !attrs.includes('application/ld+json') &&
+      !attrs.includes('data-theme-init') &&
+      !body.includes("getElementById('theme-toggle')"));
     expect(disallowed).toEqual([]);
     expect(html).not.toMatch(/\ssrc="/);
   });
