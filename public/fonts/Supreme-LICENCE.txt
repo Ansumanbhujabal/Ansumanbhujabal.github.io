@@ -1,0 +1,37 @@
+Supreme — Fontshare licence
+============================
+
+Fontshare (https://www.fontshare.com) serves its licence pages as a
+client-rendered single-page app with no server-side rendering, so the
+full prose of the "ITF Free Font License" (https://www.fontshare.com/licenses/itf-ffl)
+could not be retrieved by an automated fetch (curl and a rendering
+web-fetch tool both returned only the empty app shell; no cached/SSR
+copy was found via search or the Wayback Machine either).
+
+What follows is verbatim metadata read directly out of the OpenType
+`name` table embedded in the downloaded Supreme font files themselves
+(public/fonts/supreme-400.woff2, supreme-500.woff2, supreme-700.woff2)
+via fontTools — i.e. the licence text Indian Type Foundry/Fontshare
+themselves shipped inside the font binaries:
+
+Copyright (nameID 0):
+  Copyright 2016-2021 Indian Type Foundry. All rights reserved.
+
+Trademark notice (nameID 7):
+  Supreme is a trademark of the Indian Type Foundry.
+
+License description (nameID 13):
+  This Font Software is protected under domestic and international
+  trademark and copyright law. You agree to identify the ITF fonts by
+  name and credit the ITF's ownership of the trademarks and copyrights
+  in any design or production credits.
+
+License info URL (nameID 14):
+  https://fontshare.com/terms
+
+Publicly, Fontshare states Supreme is free for personal and commercial
+use, distributed under Indian Type Foundry's closed-source "Free Font
+License" (distinct from the SIL Open Font License used for their
+open-source fonts). For the complete, current legal terms, refer to:
+  https://www.fontshare.com/licenses/itf-ffl
+  https://fontshare.com/terms
