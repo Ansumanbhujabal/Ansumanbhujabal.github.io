@@ -1,0 +1,25 @@
+---
+import { SHELVES } from '../data/reading.ts';
+---
+<section id="reading"><div class="c-wide">
+  <div class="sh">
+    <span class="eyebrow">Reading</span>
+    <h2 class="disp">What I've<br>Read</h2>
+    <p>Mostly fiction, some of it responsible for the projects above.</p>
+  </div>
+  <div class="shelves">
+    {SHELVES.map(shelf => (
+      <div class="shelf">
+        <h3 class="shelf-h"><span>{shelf.emoji}</span> {shelf.name}</h3>
+        <ul class="books">
+          {shelf.books.map(book => (
+            <li class="book">
+              <span class="book-t">{book.title}</span>
+              {book.author && <span class="book-a">{book.author}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+</div></section>
