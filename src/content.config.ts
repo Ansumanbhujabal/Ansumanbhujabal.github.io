@@ -20,6 +20,14 @@ export const logSchema = z.object({
   url: z.string().url().optional(),
 });
 
+export const timelineSchema = z.object({
+  order: z.number().int().positive(),
+  period: z.string(),
+  org: z.string(),
+  role: z.string(),
+  note: z.string().optional(),
+});
+
 export const collections = {
   projects: defineCollection({
     loader: glob({ pattern: '**/*.md', base: './src/content/projects' }),
@@ -28,5 +36,9 @@ export const collections = {
   log: defineCollection({
     loader: glob({ pattern: '**/*.md', base: './src/content/log' }),
     schema: logSchema,
+  }),
+  timeline: defineCollection({
+    loader: glob({ pattern: '**/*.md', base: './src/content/timeline' }),
+    schema: timelineSchema,
   }),
 };
