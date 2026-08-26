@@ -18,9 +18,10 @@ describe('rendered page', () => {
     expect(html).not.toContain('NanoClaw');
     expect(html).not.toContain('Asymmetric Guardians');
   });
-  it('numbers work entries with zero padding', () => {
-    expect(html).toContain('>01<');
-    expect(html).toContain('>05<');
+  it('numbers all five projects with zero padding', () => {
+    for (const n of ['01','02','03','04','05']) {
+      expect(html).toContain(`class="pc-no">${n}<`);
+    }
   });
   it('ships no client-side javascript beyond ld+json and the inline theme scripts', () => {
     const scripts = [...html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/g)];
@@ -37,5 +38,16 @@ describe('rendered page', () => {
   });
   it('links the résumé', () => {
     expect(html).toContain('/resume.pdf');
+  });
+  it('opens outbound links in a new tab, safely', () => {
+    const anchors = [...html.matchAll(/<a\s([^>]*)>/g)].map(m => m[1]);
+    const outbound = anchors.filter(a => /href="(https?:|\/resume)/.test(a));
+    expect(outbound.length).toBeGreaterThan(5);
+    for (const a of outbound) {
+      expect(a).toContain('target="_blank"');
+      expect(a).toContain('rel="noopener noreferrer"');
+    }
+    const internal = anchors.filter(a => /href="(#|mailto:)/.test(a));
+    for (const a of internal) expect(a).not.toContain('target="_blank"');
   });
 });

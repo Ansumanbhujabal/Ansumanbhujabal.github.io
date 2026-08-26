@@ -1,9 +1,16 @@
 ---
 import type { CollectionEntry } from 'astro:content';
+import ProjectArt from './ProjectArt.astro';
 interface Props { projects: CollectionEntry<'projects'>[] }
 const { projects } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, '0');
 const LIVE = new Set(['live', 'running', 'early access']);
+const slugOf = (name: string) =>
+  name.toLowerCase().startsWith('polly') ? 'polly'
+  : name.toLowerCase().startsWith('ultradoc') ? 'ultradoc'
+  : name.toLowerCase().startsWith('mentis') ? 'mentis'
+  : name.toLowerCase().startsWith('pugmark') ? 'pugmark'
+  : 'pulse';
 ---
 {projects.length > 0 && (
 <section id="work"><div class="c">
@@ -12,24 +19,26 @@ const LIVE = new Set(['live', 'running', 'early access']);
     <h2 class="disp">Things I Built<br>And Shipped</h2>
     <p>Every one of these has either real users, a live demo, or a review that found something I missed.</p>
   </div>
-  {projects.map(p => (
-    <div class="step">
-      <div class="num disp">{pad(p.data.order)}</div>
-      <div>
-        <div class="ttl">
+  <div class="grid">
+    {projects.map(p => (
+      <article class="pc">
+        <div class="pc-art"><ProjectArt slug={slugOf(p.data.name)} /></div>
+        <div class="pc-head">
+          <span class="pc-no">{pad(p.data.order)}</span>
           <h3>{p.data.name}</h3>
           <span class={LIVE.has(p.data.status) ? 'pill on' : 'pill'}>{p.data.status}</span>
         </div>
-        <p>{p.data.summary}</p>
+        {p.data.story && <p class="pc-story">{p.data.story}</p>}
+        <p class="pc-sum">{p.data.summary}</p>
         {p.data.metrics && p.data.metrics.length > 0 && (
-          <p><span class="met">{p.data.metrics.join(' · ')}</span></p>
+          <p class="met">{p.data.metrics.join(' · ')}</p>
         )}
         <div class="lk">
-          {p.data.repo && <a href={p.data.repo}>Repository</a>}
-          {p.data.demo && <a href={p.data.demo}>Live demo</a>}
+          {p.data.repo && <a href={p.data.repo} target="_blank" rel="noopener noreferrer">Repository</a>}
+          {p.data.demo && <a href={p.data.demo} target="_blank" rel="noopener noreferrer">Live demo</a>}
         </div>
-      </div>
-    </div>
-  ))}
+      </article>
+    ))}
+  </div>
 </div></section>
 )}

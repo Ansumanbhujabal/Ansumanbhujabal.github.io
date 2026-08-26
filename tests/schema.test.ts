@@ -9,6 +9,7 @@ const projectSchema = z.object({
   demo: z.string().url().optional(),
   ghRepo: z.string().regex(/^[\w.-]+\/[\w.-]+$/).optional(),
   summary: z.string().min(1),
+  story: z.string().optional(),
   metrics: z.array(z.string()).optional(),
 });
 

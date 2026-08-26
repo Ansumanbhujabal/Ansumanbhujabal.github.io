@@ -1,0 +1,70 @@
+---
+interface Props { slug: string }
+const { slug } = Astro.props;
+---
+{slug === 'polly' && (
+  <svg class="art" viewBox="0 0 96 72" role="img" aria-label="A mesh net catching arrows, with one passing through">
+    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <path d="M18 14 L78 14 M18 30 L78 30 M18 46 L78 46 M18 62 L78 62" opacity=".45"/>
+      <path d="M26 8 L26 66 M42 8 L42 66 M58 8 L58 66 M74 8 L74 66" opacity=".45"/>
+      <path d="M4 4 L23 27 M4 22 L39 43 M4 40 L23 59"/>
+      <path d="M20 25 l5 1 -2 -5 M36 41 l5 1 -2 -5 M20 57 l5 1 -2 -5"/>
+      <path d="M4 58 L92 34" stroke="var(--ac)"/>
+      <path d="M88 33 l5 1 -2 -5" stroke="var(--ac)"/>
+    </g>
+  </svg>
+)}
+{slug === 'ultradoc' && (
+  <svg class="art" viewBox="0 0 96 72" role="img" aria-label="Stacked documents with a retrieval path threading through them">
+    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <path d="M20 12 h34 l8 8 v18 h-42 z" opacity=".5"/>
+      <path d="M26 22 h34 l8 8 v18 h-42 z" opacity=".75"/>
+      <path d="M32 32 h34 l8 8 v18 h-42 z"/>
+      <path d="M38 44 h20 M38 51 h26 M38 58 h14" opacity=".6"/>
+      <path d="M8 60 C 26 60, 24 40, 44 40 S 66 22, 88 18" stroke="var(--ac)"/>
+      <circle cx="88" cy="18" r="2.6" fill="var(--ac)" stroke="none"/>
+    </g>
+  </svg>
+)}
+{slug === 'mentis' && (
+  <svg class="art" viewBox="0 0 96 72" role="img" aria-label="A brief with citation arcs reaching out to source nodes">
+    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <path d="M30 10 h30 v52 h-30 z"/>
+      <path d="M36 22 h18 M36 30 h18 M36 38 h12 M36 46 h16" opacity=".6"/>
+      <path d="M30 26 C 16 26, 14 16, 10 14"/>
+      <path d="M30 40 C 14 42, 12 52, 8 56"/>
+      <path d="M60 20 C 76 18, 78 10, 84 8"/>
+      <path d="M60 48 C 78 50, 80 58, 86 62"/>
+      <circle cx="10" cy="14" r="2.4" fill="currentColor" stroke="none"/>
+      <circle cx="8" cy="56" r="2.4" fill="currentColor" stroke="none"/>
+      <circle cx="84" cy="8" r="2.4" fill="var(--ac)" stroke="none"/>
+      <circle cx="86" cy="62" r="2.4" fill="currentColor" stroke="none"/>
+    </g>
+  </svg>
+)}
+{slug === 'pugmark' && (
+  <svg class="art" viewBox="0 0 96 72" role="img" aria-label="A tiger pugmark among forest grasses">
+    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <path d="M6 64 C 10 48, 12 44, 14 34 M16 64 C 19 52, 20 46, 21 40" opacity=".55"/>
+      <path d="M82 64 C 86 50, 87 44, 88 36 M72 64 C 76 52, 77 48, 78 42" opacity=".55"/>
+      <path d="M40 36 C 34 30, 34 20, 40 18 C 46 16, 50 24, 47 32 Z"/>
+      <path d="M56 34 C 52 26, 55 17, 61 18 C 67 19, 67 29, 62 34 Z"/>
+      <path d="M28 46 C 24 40, 25 32, 30 32 C 35 32, 37 40, 33 45 Z" opacity=".8"/>
+      <path d="M70 46 C 67 40, 69 33, 74 34 C 79 35, 78 43, 74 46 Z" opacity=".8"/>
+      <path d="M36 62 C 28 56, 30 44, 42 42 C 56 40, 70 48, 66 58 C 63 65, 45 68, 36 62 Z" stroke="var(--ac)"/>
+    </g>
+  </svg>
+)}
+{slug === 'pulse' && (
+  <svg class="art" viewBox="0 0 96 72" role="img" aria-label="Two wrists connected by a single heartbeat line">
+    <g fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round">
+      <rect x="8" y="22" width="20" height="28" rx="6"/>
+      <path d="M12 22 v-6 h12 v6 M12 50 v6 h12 v-6" opacity=".6"/>
+      <rect x="68" y="22" width="20" height="28" rx="6"/>
+      <path d="M72 22 v-6 h12 v6 M72 50 v6 h12 v-6" opacity=".6"/>
+      <path d="M30 36 h8 l4 -10 5 20 4 -14 4 4 h9" stroke="var(--ac)"/>
+      <path d="M60 30 a 10 10 0 0 1 0 12" opacity=".5"/>
+      <path d="M64 26 a 15 15 0 0 1 0 20" opacity=".3"/>
+    </g>
+  </svg>
+)}
