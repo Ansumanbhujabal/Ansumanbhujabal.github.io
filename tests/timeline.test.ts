@@ -26,10 +26,9 @@ describe('career timeline', () => {
     expect(html).toContain('May 2024 — Jan 2025');
   });
   it('omits education from the page entirely, including machine-readable metadata', () => {
-    expect(html).not.toContain('Parala Maharaja');
-    expect(html).not.toMatch(/B\.?Tech/i);
-    expect(html).not.toContain('SGPA');
-    expect(html).not.toContain('alumniOf');
+      // Generic terms on purpose: naming the institution in order to assert
+      // its absence would publish it in this repo, defeating the exclusion.
+      expect(html).not.toMatch(/B\.?Tech|SGPA|Engineering College|alumniOf/i);
   });
   it('shows exactly the five intended entries and nothing else', () => {
     // Asserted positively on purpose: naming excluded employers in a test
