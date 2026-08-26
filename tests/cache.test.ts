@@ -1,9 +1,11 @@
 import { describe, it, expect, beforeEach, afterEach } from 'vitest';
-import { mkdirSync, rmSync, writeFileSync, existsSync, readFileSync } from 'node:fs';
+import { rmSync, writeFileSync, existsSync, readFileSync, readdirSync } from 'node:fs';
 import { mkdtempSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { readCache, writeCache, withCache } from '../src/lib/cache';
+
+const REAL_CACHE_DIR = 'data/cache';
 
 let tmp: string;
 
@@ -54,35 +56,34 @@ describe('cache', () => {
     expect(out).toBeNull();
   });
 
-  it('does not touch real data/cache directory during tests', () => {
-    // Verify that the temp directory is being used
-    expect(process.env.CACHE_DIR).toBe(tmp);
-    expect(process.env.CACHE_DIR).not.toContain('data/cache');
+  it('writes cache files under CACHE_DIR and never under the real data/cache directory', () => {
+    writeCache('isolation-check', { ok: true });
+    expect(existsSync(join(tmp, 'isolation-check.json'))).toBe(true);
+    expect(existsSync(join(REAL_CACHE_DIR, 'isolation-check.json'))).toBe(false);
   });
 });
 
-describe('cache - real data/cache survives test suite', () => {
-  const REAL_CACHE_DIR = 'data/cache';
-  const SENTINEL_FILE = join(REAL_CACHE_DIR, 'sentinel.json');
-  const SENTINEL_CONTENT = { test: 'sentinel', timestamp: Date.now() };
+describe('cache module never writes outside CACHE_DIR', () => {
+  // Proves the same isolation guarantee as the block above, but from the
+  // other direction: snapshot the real, git-tracked data/cache directory,
+  // exercise the cache module against an unrelated temp directory, then
+  // confirm the tracked directory's contents are byte-for-byte unchanged.
+  // This never writes into data/cache itself, so a crashed run can't strand
+  // an untracked file there the way a direct write to the tracked dir would.
+  it('leaves the real data/cache directory untouched', () => {
+    const before = existsSync(REAL_CACHE_DIR) ? readdirSync(REAL_CACHE_DIR).sort() : [];
 
-  beforeEach(() => {
-    // Create the real cache directory if it doesn't exist
-    mkdirSync(REAL_CACHE_DIR, { recursive: true });
-    // Write a sentinel file
-    writeFileSync(SENTINEL_FILE, JSON.stringify(SENTINEL_CONTENT, null, 2) + '\n');
-  });
+    const isolatedTmp = mkdtempSync(join(tmpdir(), 'cache-isolation-'));
+    try {
+      process.env.CACHE_DIR = isolatedTmp;
+      writeCache('sentinel', { test: 'sentinel', timestamp: Date.now() });
+      expect(existsSync(join(isolatedTmp, 'sentinel.json'))).toBe(true);
+    } finally {
+      delete process.env.CACHE_DIR;
+      rmSync(isolatedTmp, { recursive: true, force: true });
+    }
 
-  it('data/cache directory and its contents are untouched after full test suite', () => {
-    // Verify sentinel file exists
-    expect(existsSync(SENTINEL_FILE)).toBe(true);
-    // Verify sentinel content is unchanged
-    const content = JSON.parse(readFileSync(SENTINEL_FILE, 'utf8'));
-    expect(content).toEqual(SENTINEL_CONTENT);
-  });
-
-  afterEach(() => {
-    // Clean up: remove only the sentinel file, leave data/cache intact
-    rmSync(SENTINEL_FILE, { force: true });
+    const after = existsSync(REAL_CACHE_DIR) ? readdirSync(REAL_CACHE_DIR).sort() : [];
+    expect(after).toEqual(before);
   });
 });
