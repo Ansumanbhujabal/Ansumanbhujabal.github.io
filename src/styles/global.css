@@ -1,0 +1,26 @@
+@font-face{font-family:'Unica One';src:url('/fonts/unica-one-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Supreme';src:url('/fonts/supreme-400.woff2') format('woff2');font-weight:400;font-display:swap}
+@font-face{font-family:'Supreme';src:url('/fonts/supreme-500.woff2') format('woff2');font-weight:500;font-display:swap}
+@font-face{font-family:'Supreme';src:url('/fonts/supreme-700.woff2') format('woff2');font-weight:700;font-display:swap}
+
+:root{
+  --bg:#0d1117; --sf:#161b22; --sf2:#1c2129; --bd:#30363d; --bd2:#21262d;
+  --tx:#e6edf3; --mu:#8b949e; --dim:#6e7681; --ac:#70d100; --acs:rgba(112,209,0,.10);
+  --fd:'Unica One',Impact,'Arial Narrow',sans-serif;
+  --fb:'Supreme',-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;
+  --fm:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--tx);font-family:var(--fb);font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.c{max-width:64rem;margin:0 auto;padding:0 clamp(1.2rem,4vw,2.5rem)}
+.disp{font-family:var(--fd);font-weight:400;text-transform:uppercase;letter-spacing:.005em;line-height:.98}
+.eyebrow{font-family:var(--fm);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;color:var(--ac)}
+section{padding:clamp(3.4rem,8vw,5.5rem) 0;border-bottom:1px solid var(--bd2)}
+.sh{margin-bottom:2.6rem}
+h2{font-size:clamp(1.9rem,4.6vw,3rem);margin:.75rem 0 .8rem}
+.sh p{color:var(--mu);max-width:52ch;margin:0;font-size:.98rem}
+.btn{background:var(--ac);color:#0b1000;font-weight:700;font-size:.85rem;padding:.5rem 1.05rem;border-radius:2px;transition:.15s;display:inline-block}
+.btn:hover{filter:brightness(1.12)}
+.ghost{border:1px solid var(--bd);padding:.5rem 1.05rem;border-radius:2px;font-size:.85rem;color:var(--mu);transition:.15s;display:inline-block}
+.ghost:hover{border-color:var(--ac);color:var(--tx)}
