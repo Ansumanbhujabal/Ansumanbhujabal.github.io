@@ -1,5 +1,6 @@
 ---
-interface Props { slug: string }
+import type { ProjectArtSlug } from '../lib/project-art.ts';
+interface Props { slug: ProjectArtSlug | null }
 const { slug } = Astro.props;
 ---
 {slug === 'polly' && (

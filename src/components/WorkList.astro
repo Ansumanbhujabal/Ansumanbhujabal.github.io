@@ -1,15 +1,10 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import ProjectArt from './ProjectArt.astro';
+import { resolveArtSlug } from '../lib/project-art.ts';
 interface Props { projects: CollectionEntry<'projects'>[] }
 const { projects } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, '0');
-const slugOf = (name: string) =>
-  name.toLowerCase().startsWith('polly') ? 'polly'
-  : name.toLowerCase().startsWith('ultradoc') ? 'ultradoc'
-  : name.toLowerCase().startsWith('mentis') ? 'mentis'
-  : name.toLowerCase().startsWith('pugmark') ? 'pugmark'
-  : 'pulse';
 ---
 {projects.length > 0 && (
 <section id="work"><div class="c-wide">
@@ -21,7 +16,7 @@ const slugOf = (name: string) =>
   <div class="grid">
     {projects.map(p => (
       <article class="pc">
-        <div class="pc-art"><ProjectArt slug={slugOf(p.data.name)} /></div>
+        <div class="pc-art"><ProjectArt slug={resolveArtSlug(p.data.name)} /></div>
         <div class="pc-head">
           <span class="pc-no">{pad(p.data.order)}</span>
           <h3>{p.data.name}</h3>
