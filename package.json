@@ -1,0 +1,21 @@
+{
+  "name": "ansumanbhujabal-portfolio",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "fetch": "tsx scripts/fetch-data.mjs",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "astro": "^5.0.0",
+    "@astrojs/sitemap": "^3.2.0"
+  },
+  "devDependencies": {
+    "vitest": "^2.1.0",
+    "typescript": "^5.6.0",
+    "tsx": "^4.19.0"
+  }
+}
