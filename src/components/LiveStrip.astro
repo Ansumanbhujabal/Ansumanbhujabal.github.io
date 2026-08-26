@@ -1,0 +1,9 @@
+---
+interface Props { rows: Array<{ label: string; value: string }> }
+const { rows } = Astro.props;
+---
+{rows.length > 0 && (
+  <div class="live"><div class="c lv">
+    {rows.map(r => <span><b>{r.label}</b>{r.value}</span>)}
+  </div></div>
+)}

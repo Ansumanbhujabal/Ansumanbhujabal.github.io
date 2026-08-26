@@ -1,0 +1,26 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/display.ts';
+import { render } from 'astro:content';
+interface Props { entries: CollectionEntry<'log'>[] }
+const { entries } = Astro.props;
+const rendered = await Promise.all(entries.map(async e => ({ e, Content: (await render(e)).Content })));
+---
+{entries.length > 0 && (
+<section id="log"><div class="c">
+  <div class="sh">
+    <span class="eyebrow">Log</span>
+    <h2 class="disp">What I'm Reading,<br>Building, Learning</h2>
+    <p>Updated whenever something happens. Read, built, learned, watched.</p>
+  </div>
+  <div class="log">
+    {rendered.map(({ e, Content }) => (
+      <div class="li">
+        <div class="m"><i>{e.data.kind}</i><span>{formatDate(e.data.date)}</span></div>
+        <h4>{e.data.url ? <a href={e.data.url}>{e.data.title}</a> : e.data.title}</h4>
+        <p><Content /></p>
+      </div>
+    ))}
+  </div>
+</div></section>
+)}

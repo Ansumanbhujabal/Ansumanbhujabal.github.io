@@ -1,7 +1,41 @@
 ---
 import Base from '../layouts/Base.astro';
+import Nav from '../components/Nav.astro';
+import Hero from '../components/Hero.astro';
+import LiveStrip from '../components/LiveStrip.astro';
+import Capabilities from '../components/Capabilities.astro';
+import WorkList from '../components/WorkList.astro';
+import LogGrid from '../components/LogGrid.astro';
+import Cta from '../components/Cta.astro';
+import Footer from '../components/Footer.astro';
+import { getCollection } from 'astro:content';
+import { recentLog, formatDate, liveFields } from '../lib/display.ts';
+import { readCache } from '../lib/cache.ts';
+import { SITE_CONFIG } from '../lib/config.ts';
+import type { Watching } from '../lib/fetchers/anilist.ts';
+
+const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
+const logEntries = recentLog(await getCollection('log'), SITE_CONFIG.logLimit);
+
+const watchingData = readCache<Watching>('anilist');
+const watching = watchingData
+  ? `${watchingData.title} · ep ${watchingData.progress}/${watchingData.episodes ?? '?'}`
+  : null;
+
+const rows = liveFields({
+  shipping: projects.find(p => p.data.status === 'running')?.data.name ?? null,
+  watching,
+  lastLog: logEntries[0] ? formatDate(logEntries[0].data.date) : null,
+});
 ---
 <Base title="Ansuman SS Bhujabala — AI Engineer"
-      description="AI engineer building agentic systems, retrieval, and evaluation harnesses that survive production.">
-  <div class="c"><h1 class="disp">Ansuman SS Bhujabala</h1></div>
+      description="AI engineer building agentic systems, retrieval, and evaluation harnesses that survive production. Adversarial testing, guardrails, MCP agent infrastructure.">
+  <Nav />
+  <Hero />
+  <LiveStrip rows={rows} />
+  <Capabilities />
+  <WorkList projects={projects} />
+  <LogGrid entries={logEntries} />
+  <Cta />
+  <Footer />
 </Base>
