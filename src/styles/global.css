@@ -60,14 +60,6 @@ h1 span{color:var(--ac)}
 .card .n{font-family:var(--fd);font-size:2.1rem;color:var(--ac);line-height:1;margin-bottom:.55rem}
 .card h3{font-size:1.02rem;margin:0 0 .5rem;font-weight:600}
 .card p{margin:0;color:var(--mu);font-size:.9rem;line-height:1.6}
-.step{display:grid;grid-template-columns:6.5rem 1fr;gap:1.6rem;padding:1.9rem 0;border-top:1px solid var(--bd2)}
-.step:first-of-type{border-top:0;padding-top:.4rem}
-@media(max-width:44rem){.step{grid-template-columns:1fr;gap:.5rem}}
-.step .num{font-family:var(--fd);font-size:3.1rem;color:var(--bd);line-height:.9}
-.step:hover .num{color:var(--ac)}
-.step .ttl{display:flex;align-items:baseline;gap:.7rem;flex-wrap:wrap;margin-bottom:.45rem}
-.step h3{font-size:1.3rem;margin:0;font-weight:600}
-.step p{margin:0;color:var(--mu);font-size:.95rem;max-width:62ch;line-height:1.65}
 .pill{font-family:var(--fm);font-size:.63rem;letter-spacing:.13em;text-transform:uppercase;border:1px solid var(--bd);color:var(--dim);padding:.13rem .45rem;border-radius:2px}
 .pill.on{color:var(--ac);border-color:var(--ac);background:var(--acs)}
 .met{font-family:var(--fm);color:var(--tx);font-size:.87rem}
@@ -90,3 +82,20 @@ footer{padding:2.2rem 0 3rem}
 .ft a{color:var(--mu)}
 .ft a:hover{color:var(--ac)}
 .ft .set{display:flex;gap:1.4rem;flex-wrap:wrap}
+.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.1rem}
+@media(max-width:60rem){.grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:40rem){.grid{grid-template-columns:1fr}}
+.pc{background:var(--sf);border:1px solid var(--bd);border-radius:3px;
+    padding:1.3rem 1.3rem 1.4rem;display:flex;flex-direction:column;transition:.18s}
+.pc:hover{border-color:var(--ac);background:var(--sf2)}
+.pc-art{margin:-.3rem 0 .9rem;color:var(--mu)}
+.pc:hover .pc-art{color:var(--tx)}
+.art{width:100%;height:auto;max-height:5.4rem;display:block}
+.pc-head{display:flex;align-items:baseline;gap:.55rem;flex-wrap:wrap;margin-bottom:.6rem}
+.pc-no{font-family:var(--fd);font-size:1.5rem;color:var(--bd);line-height:1}
+.pc:hover .pc-no{color:var(--ac)}
+.pc h3{font-size:1.12rem;margin:0;font-weight:600}
+.pc-story{margin:0 0 .7rem;font-size:.9rem;line-height:1.6;color:var(--tx)}
+.pc-sum{margin:0 0 .7rem;font-size:.85rem;line-height:1.6;color:var(--mu)}
+.pc .met{font-family:var(--fm);font-size:.72rem;color:var(--tx);margin:0 0 .8rem;line-height:1.7}
+.pc .lk{margin-top:auto;padding-top:.2rem}
