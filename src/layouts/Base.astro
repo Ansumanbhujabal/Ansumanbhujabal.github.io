@@ -15,6 +15,18 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
   <meta property="og:description" content={description} />
   <meta property="og:type" content="profile" />
   <meta property="og:url" content={canonical} />
+  <script type="application/ld+json" set:html={JSON.stringify({
+    '@context': 'https://schema.org',
+    '@type': 'Person',
+    name: 'Ansuman SS Bhujabala',
+    jobTitle: 'AI Engineer',
+    email: 'mailto:ansumanbhujabal1@gmail.com',
+    address: { '@type': 'PostalAddress', addressLocality: 'Hyderabad', addressCountry: 'IN' },
+    alumniOf: { '@type': 'CollegeOrUniversity', name: 'Parala Maharaja Engineering College' },
+    knowsAbout: ['Agentic AI systems','Retrieval-Augmented Generation','LLM evaluation','Adversarial testing','Model Context Protocol','AI security','LLM fine-tuning','AIOps'],
+    url: 'https://ansumanbhujabal.github.io',
+    sameAs: ['https://github.com/Ansumanbhujabal','https://www.linkedin.com/in/ansuman-simanta-sekhar-bhujabala','https://www.youtube.com/@AnasumanOn'],
+  })} />
 </head>
 <body><slot /></body>
 </html>
