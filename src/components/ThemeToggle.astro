@@ -1,0 +1,14 @@
+---
+---
+<button class="tt" id="theme-toggle" type="button" aria-label="Toggle colour theme">
+  <span class="off">Dark</span><span class="on">Light</span>
+</button>
+<script is:inline>
+  document.getElementById('theme-toggle')?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    if (next === 'dark') root.setAttribute('data-theme', 'dark');
+    else root.removeAttribute('data-theme');
+    try { localStorage.setItem('theme', next); } catch {}
+  });
+</script>
