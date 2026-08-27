@@ -1,14 +1,34 @@
 ---
-import { SHELVES } from '../data/reading.ts';
+import { SHELVES, ANIME } from '../data/reading.ts';
+
+const bookCount = SHELVES.reduce((n, s) => n + s.books.length, 0);
+const animeCount = ANIME.reduce((n, s) => n + s.books.length, 0);
 ---
 <section id="reading"><div class="c-wide">
   <div class="sh">
-    <span class="eyebrow">Reading</span>
-    <h2 class="disp">What I've<br>Read</h2>
-    <p>Mostly fiction, some of it responsible for the projects above.</p>
+    <span class="eyebrow">Off the clock</span>
+    <h2 class="disp">Nature, Literature<br>And Anime</h2>
+    <p>Away from the engineering. The Corbett and Anderson shelves are directly responsible for Pugmark.</p>
   </div>
+  <h3 class="coll-h">Books <span class="coll-n">{bookCount}</span></h3>
   <div class="shelves">
     {SHELVES.map(shelf => (
+      <div class="shelf">
+        <h3 class="shelf-h"><span>{shelf.emoji}</span> {shelf.name}</h3>
+        <ul class="books">
+          {shelf.books.map(book => (
+            <li class="book">
+              <span class="book-t">{book.title}</span>
+              {book.author && <span class="book-a">{book.author}</span>}
+            </li>
+          ))}
+        </ul>
+      </div>
+    ))}
+  </div>
+  <h3 class="coll-h coll-h--anime">Anime <span class="coll-n">{animeCount}</span></h3>
+  <div class="shelves">
+    {ANIME.map(shelf => (
       <div class="shelf">
         <h3 class="shelf-h"><span>{shelf.emoji}</span> {shelf.name}</h3>
         <ul class="books">
