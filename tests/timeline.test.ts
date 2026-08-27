@@ -10,7 +10,14 @@ beforeAll(() => {
 
 describe('career timeline', () => {
   it('no longer renders the removed Parasyte log entry', () => {
-    expect(html).not.toContain('Parasyte');
+    // Scoped to the log section: "Parasyte -the maxim-" legitimately
+    // reappears later as an anime title in the reading section.
+    const logIdx = html.indexOf('id="log"');
+    const readingIdx = html.indexOf('id="reading"');
+    expect(logIdx).toBeGreaterThan(-1);
+    expect(readingIdx).toBeGreaterThan(logIdx);
+    const logSection = html.slice(logIdx, readingIdx);
+    expect(logSection).not.toContain('Parasyte');
   });
   it('lays the projects out five per row on wide screens', () => {
     const css = readFileSync('src/styles/global.css', 'utf8');
