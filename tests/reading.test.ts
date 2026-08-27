@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
 import { readFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
+import { SHELVES, ANIME } from '../src/data/reading.ts';
 
 let html = '';
 beforeAll(() => {
@@ -9,7 +10,7 @@ beforeAll(() => {
 }, 120_000);
 
 describe('reading portfolio', () => {
-  it('renders all eight shelf names', () => {
+  it('renders all eight book shelf names', () => {
     for (const name of [
       'Intellectual &amp; Personal Development',
       'Wildlife, Nature &amp; Conservation',
@@ -24,7 +25,7 @@ describe('reading portfolio', () => {
     }
   });
 
-  it('renders a representative title from each shelf', () => {
+  it('renders a representative title from each book shelf', () => {
     for (const title of [
       'Sapiens: A Brief History of Humankind',
       'Man-Eaters of Kumaon',
@@ -39,8 +40,48 @@ describe('reading portfolio', () => {
     }
   });
 
-  it('renders exactly 44 book entries', () => {
-    expect((html.match(/class="book"/g) ?? []).length).toBe(44);
+  it('renders all six anime shelf names', () => {
+    for (const name of [
+      'Ghibli &amp; Hand-Drawn Worlds',
+      'Films That Ruined Me',
+      'Speed &amp; Fists',
+      'Psychological &amp; Thriller',
+      'Slice of Life &amp; Chaos',
+      'Romance',
+    ]) {
+      expect(html).toContain(name);
+    }
+  });
+
+  it('renders a representative title from each anime shelf, including stated favourites', () => {
+    for (const title of [
+      'My Neighbor Totoro',
+      'Your Name.',
+      'MF GHOST',
+      'Death Note',
+      'GTO: Great Teacher Onizuka',
+      'Nichijou - My Ordinary Life',
+      'Horimiya',
+    ]) {
+      expect(html).toContain(title);
+    }
+  });
+
+  it('renders exactly 109 title entries (44 books + 65 anime)', () => {
+    expect((html.match(/class="book"/g) ?? []).length).toBe(109);
+  });
+
+  it('shows Books and Anime sub-headings with counts matching the data arrays', () => {
+    const bookCount = SHELVES.reduce((n, s) => n + s.books.length, 0);
+    const animeCount = ANIME.reduce((n, s) => n + s.books.length, 0);
+
+    const booksMatch = html.match(/Books\s*<span class="coll-n">(\d+)<\/span>/);
+    const animeMatch = html.match(/Anime\s*<span class="coll-n">(\d+)<\/span>/);
+
+    expect(booksMatch).not.toBeNull();
+    expect(animeMatch).not.toBeNull();
+    expect(Number(booksMatch![1])).toBe(bookCount);
+    expect(Number(animeMatch![1])).toBe(animeCount);
   });
 
   it('appears after the log section and before the CTA', () => {
