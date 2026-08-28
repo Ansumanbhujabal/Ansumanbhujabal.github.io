@@ -41,6 +41,9 @@ describe('rendered page', () => {
     expect(html).toContain('class="hero-cat" src="/sakamoto-survive.gif"');
     expect(html).not.toContain('tenor.com');
   });
+  it('places the timeline sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="tl-cat" src="/nano-nervous.gif"');
+  });
   it('uses absolute dates and no relative time', () => {
     expect(html).toContain('26 Aug 2026');
     expect(html).not.toMatch(/days ago|Last updated/i);
