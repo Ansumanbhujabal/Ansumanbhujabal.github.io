@@ -53,6 +53,9 @@ describe('rendered page', () => {
   it('places the log sticker on a self-hosted asset too', () => {
     expect(html).toContain('class="log-cat" src="/yuuko-bird-explosion.gif"');
   });
+  it('places the reading sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="reading-cat" src="/yuuko-wave.gif"');
+  });
   it('uses absolute dates and no relative time', () => {
     expect(html).toContain('26 Aug 2026');
     expect(html).not.toMatch(/days ago|Last updated/i);
