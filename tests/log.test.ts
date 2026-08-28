@@ -9,6 +9,7 @@ beforeAll(() => {
 }, 120_000);
 
 const LINKS = [
+  'https://blog.bluedot.org/p/introduction-to-mechanistic-interpretability',
   'https://blog.bluedot.org/p/what-is-ai-alignment',
   'https://www.cold-takes.com/why-ai-alignment-could-be-hard-with-modern-deep-learning/',
   'https://metr.org/blog/2025-06-05-recent-reward-hacking/',
@@ -16,8 +17,8 @@ const LINKS = [
 ];
 
 describe('reading log', () => {
-  it('renders four entries', () => {
-    expect((html.match(/class="li"/g) ?? []).length).toBe(4);
+  it('renders five entries', () => {
+    expect((html.match(/class="li"/g) ?? []).length).toBe(5);
   });
   it('links every entry to its source, in a new tab', () => {
     for (const href of LINKS) {
