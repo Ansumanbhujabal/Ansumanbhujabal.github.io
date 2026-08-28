@@ -47,6 +47,9 @@ describe('rendered page', () => {
   it('places the capabilities sticker on a self-hosted asset too', () => {
     expect(html).toContain('class="cap-cat" src="/sakamoto-hakase.gif"');
   });
+  it('places the work sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="work-cat" src="/yuuko-nervous.gif"');
+  });
   it('uses absolute dates and no relative time', () => {
     expect(html).toContain('26 Aug 2026');
     expect(html).not.toMatch(/days ago|Last updated/i);
