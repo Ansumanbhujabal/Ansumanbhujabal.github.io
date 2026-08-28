@@ -48,13 +48,16 @@ describe('rendered page', () => {
     expect(html).toContain('class="cap-cat" src="/sakamoto-hakase.gif"');
   });
   it('places the work sticker on a self-hosted asset too', () => {
-    expect(html).toContain('class="work-cat" src="/yuuko-nervous.gif"');
+    expect(html).toContain('class="work-cat" src="/hakase-shark-bite.gif"');
   });
   it('places the log sticker on a self-hosted asset too', () => {
     expect(html).toContain('class="log-cat" src="/yuuko-bird-explosion.gif"');
   });
   it('places the reading sticker on a self-hosted asset too', () => {
     expect(html).toContain('class="reading-cat" src="/yuuko-wave.gif"');
+  });
+  it('places the CTA sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="cta-cat" src="/yuuko-icecream.gif"');
   });
   it('uses absolute dates and no relative time', () => {
     expect(html).toContain('26 Aug 2026');
