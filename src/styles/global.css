@@ -53,6 +53,9 @@ html{scroll-behavior:smooth}
 .hero{padding:clamp(4rem,11vw,7.5rem) 0 clamp(3rem,7vw,4.5rem);border-bottom:1px solid var(--bd2)}
 h1{font-size:clamp(2.9rem,8.4vw,6.1rem);margin:1.1rem 0 1.4rem;max-width:19ch}
 h1 span{color:var(--ac)}
+.cat-anchor{position:relative;display:inline-block;color:inherit}
+.hero-cat{position:absolute;top:-0.62em;right:-0.5em;width:1.35em;height:auto;
+    transform:rotate(-18deg);transform-origin:65% 90%;pointer-events:none;user-select:none}
 .lead{font-size:clamp(1rem,2vw,1.14rem);color:var(--mu);max-width:44ch;margin:0 0 2rem;line-height:1.65}
 .lead b{color:var(--tx);font-weight:500}
 .hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
