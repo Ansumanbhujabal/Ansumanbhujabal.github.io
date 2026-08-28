@@ -30,7 +30,34 @@ describe('rendered page', () => {
       !attrs.includes('data-theme-init') &&
       !body.includes("getElementById('theme-toggle')"));
     expect(disallowed).toEqual([]);
-    expect(html).not.toMatch(/\ssrc="/);
+    // No element loads an external src — except <img>, which the hero's
+    // self-hosted decorative GIF legitimately needs. <script src> is
+    // already covered above (and again, more narrowly, in theme.test.ts).
+    const srcAttrs = [...html.matchAll(/<(\w+)[^>]*\ssrc="/g)];
+    const disallowedSrc = srcAttrs.filter(([, tag]) => tag !== 'img');
+    expect(disallowedSrc).toEqual([]);
+  });
+  it('perches the hero cat on a self-hosted asset, not a remote embed', () => {
+    expect(html).toContain('class="hero-cat" src="/sakamoto-survive.gif"');
+    expect(html).not.toContain('tenor.com');
+  });
+  it('places the timeline sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="tl-cat" src="/nano-nervous.gif"');
+  });
+  it('places the capabilities sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="cap-cat" src="/sakamoto-hakase.gif"');
+  });
+  it('places the work sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="work-cat" src="/hakase-shark-bite.gif"');
+  });
+  it('places the log sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="log-cat" src="/yuuko-bird-explosion.gif"');
+  });
+  it('places the reading sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="reading-cat" src="/yuuko-wave.gif"');
+  });
+  it('places the CTA sticker on a self-hosted asset too', () => {
+    expect(html).toContain('class="cta-cat" src="/yuuko-icecream.gif"');
   });
   it('uses absolute dates and no relative time', () => {
     expect(html).toContain('26 Aug 2026');

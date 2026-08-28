@@ -53,6 +53,9 @@ html{scroll-behavior:smooth}
 .hero{padding:clamp(4rem,11vw,7.5rem) 0 clamp(3rem,7vw,4.5rem);border-bottom:1px solid var(--bd2)}
 h1{font-size:clamp(2.9rem,8.4vw,6.1rem);margin:1.1rem 0 1.4rem;max-width:19ch}
 h1 span{color:var(--ac)}
+.cat-anchor{position:relative;display:inline-block;color:inherit}
+.hero-cat{position:absolute;top:-0.62em;right:-0.5em;width:1.35em;height:auto;
+    transform:rotate(-18deg);transform-origin:65% 90%;pointer-events:none;user-select:none}
 .lead{font-size:clamp(1rem,2vw,1.14rem);color:var(--mu);max-width:44ch;margin:0 0 2rem;line-height:1.65}
 .lead b{color:var(--tx);font-weight:500}
 .hero-cta{display:flex;gap:.8rem;flex-wrap:wrap;align-items:center}
@@ -113,6 +116,28 @@ footer{padding:2.2rem 0 3rem}
 @media(max-width:44rem){
   .tl-i{grid-template-columns:1fr;gap:.2rem}
   .tl-p{padding-top:0}
+}
+.tl-cat,.cap-cat,.work-cat,.log-cat,.reading-cat,.cta-cat{display:none}
+@media(min-width:88rem){
+  #timeline,#capabilities,#work,#log,#reading,#cta{position:relative}
+  .tl-cat{display:block;position:absolute;top:6.1rem;left:calc(50% - 11.6rem);
+    width:8rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(3deg);pointer-events:none}
+  .cap-cat{display:block;position:absolute;top:6.5rem;left:calc(50% - 10.9rem);
+    width:13.3rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(-4deg);pointer-events:none}
+  .work-cat{display:block;position:absolute;top:5.9rem;left:calc(50% - 19.7rem);
+    width:10.7rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(4deg);pointer-events:none}
+  .log-cat{display:block;position:absolute;top:6.5rem;right:calc(50% + 30.4rem);
+    width:6rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(-3deg);pointer-events:none}
+  .reading-cat{display:block;position:absolute;top:5.9rem;left:calc(50% - 13.8rem);
+    width:8.2rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(-5deg);pointer-events:none}
+  .cta-cat{display:block;position:absolute;top:1rem;right:calc(50% + 30rem);
+    width:8rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(-6deg);pointer-events:none}
 }
 .c-wide{max-width:80rem;margin:0 auto;padding:0 clamp(1.2rem,4vw,2.5rem)}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.9rem}
