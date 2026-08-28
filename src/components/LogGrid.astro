@@ -7,7 +7,7 @@ const { entries } = Astro.props;
 const rendered = await Promise.all(entries.map(async e => ({ e, Content: (await render(e)).Content })));
 ---
 {entries.length > 0 && (
-<section id="log"><div class="c">
+<section id="log"><img class="log-cat" src="/yuuko-bird-explosion.gif" alt="" aria-hidden="true" width="130" height="304" loading="lazy" decoding="async"/><div class="c">
   <div class="sh">
     <span class="eyebrow">Log</span>
     <h2 class="disp">What I'm Reading,<br>Building, Learning</h2>

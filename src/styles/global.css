@@ -117,15 +117,18 @@ footer{padding:2.2rem 0 3rem}
   .tl-i{grid-template-columns:1fr;gap:.2rem}
   .tl-p{padding-top:0}
 }
-.tl-cat,.cap-cat,.work-cat{display:none}
+.tl-cat,.cap-cat,.work-cat,.log-cat{display:none}
 @media(min-width:88rem){
-  #timeline,#capabilities{position:relative}
+  #timeline,#capabilities,#log{position:relative}
   .tl-cat{display:block;position:absolute;top:9rem;left:calc(50% + 34rem);
     width:8.5rem;height:auto;border-radius:6px;border:1px solid var(--bd);
     transform:rotate(3deg);pointer-events:none}
   .cap-cat{display:block;position:absolute;top:7.5rem;left:calc(50% + 34rem);
     width:11rem;height:auto;border-radius:6px;border:1px solid var(--bd);
     transform:rotate(-4deg);pointer-events:none}
+  .log-cat{display:block;position:absolute;top:6.5rem;right:calc(50% + 34rem);
+    width:6rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(-3deg);pointer-events:none}
 }
 @media(min-width:100rem){
   #work{position:relative}
