@@ -7,8 +7,11 @@ const canonical = new URL(Astro.url.pathname, Astro.site).href;
 <html lang="en">
 <head>
   <script is:inline data-theme-init>
-    try { if (localStorage.getItem('theme') === 'dark')
-      document.documentElement.setAttribute('data-theme','dark'); } catch {}
+    try {
+      var stored = localStorage.getItem('theme');
+      var dark = stored ? stored === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches;
+      if (dark) document.documentElement.setAttribute('data-theme', 'dark');
+    } catch {}
   </script>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
