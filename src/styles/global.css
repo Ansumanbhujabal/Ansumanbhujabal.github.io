@@ -117,27 +117,43 @@ footer{padding:2.2rem 0 3rem}
   .tl-i{grid-template-columns:1fr;gap:.2rem}
   .tl-p{padding-top:0}
 }
+/* Each sticker's min-width is the actual measured point past which its
+   container has reached its own max-width AND the sticker's own box
+   still clears the viewport edge — not one shared guess. Previously
+   all six were gated at min-width:88rem (or 100rem), a number picked
+   for the old far-gutter placement; after pulling them in against the
+   headings almost none of them needed that much room any more, so at
+   a common laptop width + ~110% browser zoom (which shrinks the
+   effective CSS-px viewport) they'd all vanish at once past that one
+   threshold. Tuned per sticker instead, each with a ~2rem safety
+   margin for the scrollbar. */
 .tl-cat,.cap-cat,.work-cat,.log-cat,.reading-cat,.cta-cat{display:none}
-@media(min-width:88rem){
-  #timeline,#capabilities,#work,#log,#reading,#cta{position:relative}
+@media(min-width:71rem){
+  #timeline,#capabilities{position:relative}
   .tl-cat{display:block;position:absolute;top:6.1rem;left:calc(50% - 11.6rem);
     width:8rem;height:auto;border-radius:6px;border:1px solid var(--bd);
     transform:rotate(3deg);pointer-events:none}
   .cap-cat{display:block;position:absolute;top:6.5rem;left:calc(50% - 10.9rem);
     width:13.3rem;height:auto;border-radius:6px;border:1px solid var(--bd);
     transform:rotate(-4deg);pointer-events:none}
-  .work-cat{display:block;position:absolute;top:5.9rem;left:calc(50% - 19.7rem);
-    width:10.7rem;height:auto;border-radius:6px;border:1px solid var(--bd);
-    transform:rotate(4deg);pointer-events:none}
+}
+@media(min-width:78rem){
+  #log,#cta{position:relative}
   .log-cat{display:block;position:absolute;top:6.5rem;right:calc(50% + 30.4rem);
     width:6rem;height:auto;border-radius:6px;border:1px solid var(--bd);
     transform:rotate(-3deg);pointer-events:none}
-  .reading-cat{display:block;position:absolute;top:5.9rem;left:calc(50% - 13.8rem);
-    width:8.2rem;height:auto;border-radius:6px;border:1px solid var(--bd);
-    transform:rotate(-5deg);pointer-events:none}
   .cta-cat{display:block;position:absolute;top:1rem;right:calc(50% + 30rem);
     width:8rem;height:auto;border-radius:6px;border:1px solid var(--bd);
     transform:rotate(-6deg);pointer-events:none}
+}
+@media(min-width:87rem){
+  #work,#reading{position:relative}
+  .work-cat{display:block;position:absolute;top:5.9rem;left:calc(50% - 19.7rem);
+    width:10.7rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(4deg);pointer-events:none}
+  .reading-cat{display:block;position:absolute;top:5.9rem;left:calc(50% - 13.8rem);
+    width:8.2rem;height:auto;border-radius:6px;border:1px solid var(--bd);
+    transform:rotate(-5deg);pointer-events:none}
 }
 .c-wide{max-width:80rem;margin:0 auto;padding:0 clamp(1.2rem,4vw,2.5rem)}
 .grid{display:grid;grid-template-columns:repeat(5,1fr);gap:.9rem}
