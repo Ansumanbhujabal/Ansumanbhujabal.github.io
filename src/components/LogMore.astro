@@ -1,0 +1,22 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatDate } from '../lib/display.ts';
+export interface Item { e: CollectionEntry<'log'>; Content: any }
+interface Props { chunks: Item[][] }
+const { chunks } = Astro.props;
+const [head, ...rest] = chunks;
+const remaining = chunks.reduce((n, c) => n + c.length, 0);
+---
+<details class="log-more">
+  <summary><span class="more">Show {remaining} earlier</span><span class="less">Show fewer</span></summary>
+  <div class="log">
+    {head.map(({ e, Content }) => (
+      <div class="li">
+        <div class="m"><i>{e.data.kind}</i><span>{formatDate(e.data.date)}</span></div>
+        <h4>{e.data.url ? <a href={e.data.url} target="_blank" rel="noopener noreferrer">{e.data.title}</a> : e.data.title}</h4>
+        <p><Content /></p>
+      </div>
+    ))}
+  </div>
+  {rest.length > 0 && <Astro.self chunks={rest} />}
+</details>

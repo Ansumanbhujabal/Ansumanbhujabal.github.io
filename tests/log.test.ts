@@ -49,3 +49,41 @@ describe('reading log', () => {
     expect(html).not.toContain('Short authentication strings');
   });
 });
+
+describe('log expansion', () => {
+  const STEP = 4;      // two rows of the two-column grid
+  const VISIBLE = 6;   // shown before any click
+
+  it('shows six entries up front, rest behind nested details', () => {
+    const files = readdirSync('src/content/log').filter(f => f.endsWith('.md'));
+    expect((html.match(/class="li"/g) ?? []).length).toBe(files.length);
+    if (files.length <= VISIBLE) return;
+    expect(html).toContain('<details class="log-more">');
+  });
+
+  it('reveals exactly two rows per click', () => {
+    // Each nested <details> is one click. Every level except the last must
+    // hold a full STEP; the last holds the remainder.
+    const levels = html.split('<details class="log-more">').slice(1);
+    if (levels.length === 0) return;
+    const counts = levels.map((lvl, i) => {
+      const next = lvl.indexOf('<details class="log-more">');
+      const own = next === -1 ? lvl : lvl.slice(0, next);
+      return (own.match(/class="li"/g) ?? []).length;
+    });
+    for (const c of counts.slice(0, -1)) expect(c).toBe(STEP);
+    expect(counts[counts.length - 1]).toBeGreaterThan(0);
+    expect(counts[counts.length - 1]).toBeLessThanOrEqual(STEP);
+  });
+
+  it('uses no javascript for the expansion', () => {
+    const scripts = [...html.matchAll(/<script([^>]*)>/g)].map(m => m[1]);
+    const disallowed = scripts.filter(a =>
+      !a.includes('application/ld+json') && !a.includes('data-theme-init'));
+    for (const a of disallowed) expect(a).not.toMatch(/log|details|expand/i);
+  });
+
+  it('keeps hidden entries in the DOM so crawlers still see them', () => {
+    expect(html).toContain('Multi-Agent Risks');
+  });
+});
