@@ -20,15 +20,14 @@ const LINKS = [
 describe('reading log', () => {
   it('renders every log entry, capped at the configured limit', () => {
     // Derived, not hardcoded: a fixed count silently rots every time an
-    // entry is added. The page shows min(entries, SITE_CONFIG.logLimit).
+    // entry is added. The log is uncapped, so every entry on disk renders.
     const files = readdirSync('src/content/log').filter(f => f.endsWith('.md'));
     const expected = Math.min(files.length, SITE_CONFIG.logLimit);
     expect((html.match(/class="li"/g) ?? []).length).toBe(expected);
   });
   it('links every rendered entry to its source, in a new tab', () => {
     // Derived from what actually rendered, not a pinned URL list: the log
-    // caps at SITE_CONFIG.logLimit, so the oldest entries roll off the page
-    // as new ones are added and a hardcoded list goes stale on its own.
+    // grows as entries are added, so a hardcoded URL list goes stale on its own.
     const cards = html.match(/<div class="li">[\s\S]*?<\/div>\s*<\/div>/g) ?? [];
     expect(cards.length).toBeGreaterThan(0);
     let linked = 0;
