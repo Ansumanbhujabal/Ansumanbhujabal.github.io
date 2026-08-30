@@ -1,6 +1,7 @@
 import { describe, it, expect, beforeAll } from 'vitest';
-import { readFileSync } from 'node:fs';
+import { readFileSync, readdirSync } from 'node:fs';
 import { execSync } from 'node:child_process';
+import { SITE_CONFIG } from '../src/lib/config.ts';
 
 let html = '';
 beforeAll(() => {
@@ -17,8 +18,12 @@ const LINKS = [
 ];
 
 describe('reading log', () => {
-  it('renders five entries', () => {
-    expect((html.match(/class="li"/g) ?? []).length).toBe(5);
+  it('renders every log entry, capped at the configured limit', () => {
+    // Derived, not hardcoded: a fixed count silently rots every time an
+    // entry is added. The page shows min(entries, SITE_CONFIG.logLimit).
+    const files = readdirSync('src/content/log').filter(f => f.endsWith('.md'));
+    const expected = Math.min(files.length, SITE_CONFIG.logLimit);
+    expect((html.match(/class="li"/g) ?? []).length).toBe(expected);
   });
   it('links every entry to its source, in a new tab', () => {
     for (const href of LINKS) {
