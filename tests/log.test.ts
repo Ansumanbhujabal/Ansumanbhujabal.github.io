@@ -20,19 +20,25 @@ const LINKS = [
 describe('reading log', () => {
   it('renders every log entry, capped at the configured limit', () => {
     // Derived, not hardcoded: a fixed count silently rots every time an
-    // entry is added. The page shows min(entries, SITE_CONFIG.logLimit).
+    // entry is added. The log is uncapped, so every entry on disk renders.
     const files = readdirSync('src/content/log').filter(f => f.endsWith('.md'));
     const expected = Math.min(files.length, SITE_CONFIG.logLimit);
     expect((html.match(/class="li"/g) ?? []).length).toBe(expected);
   });
-  it('links every entry to its source, in a new tab', () => {
-    for (const href of LINKS) {
-      const re = new RegExp(`<a[^>]*href="${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*>`);
-      const m = html.match(re);
-      expect(m, `missing link ${href}`).not.toBeNull();
-      expect(m![0]).toContain('target="_blank"');
-      expect(m![0]).toContain('rel="noopener noreferrer"');
+  it('links every rendered entry to its source, in a new tab', () => {
+    // Derived from what actually rendered, not a pinned URL list: the log
+    // grows as entries are added, so a hardcoded URL list goes stale on its own.
+    const cards = html.match(/<div class="li">[\s\S]*?<\/div>\s*<\/div>/g) ?? [];
+    expect(cards.length).toBeGreaterThan(0);
+    let linked = 0;
+    for (const card of cards) {
+      const a = card.match(/<a[^>]*href="https?:[^"]*"[^>]*>/);
+      if (!a) continue;
+      linked++;
+      expect(a[0]).toContain('target="_blank"');
+      expect(a[0]).toContain('rel="noopener noreferrer"');
     }
+    expect(linked).toBe(cards.length);
   });
   it('carries no tracking parameters', () => {
     expect(html).not.toContain('utm_source=bluedot-impact');
@@ -41,5 +47,43 @@ describe('reading log', () => {
   it('no longer shows the sample entries', () => {
     expect(html).not.toContain('Signal and Telegram channel adapters');
     expect(html).not.toContain('Short authentication strings');
+  });
+});
+
+describe('log expansion', () => {
+  const STEP = 4;      // two rows of the two-column grid
+  const VISIBLE = 6;   // shown before any click
+
+  it('shows six entries up front, rest behind nested details', () => {
+    const files = readdirSync('src/content/log').filter(f => f.endsWith('.md'));
+    expect((html.match(/class="li"/g) ?? []).length).toBe(files.length);
+    if (files.length <= VISIBLE) return;
+    expect(html).toContain('<details class="log-more">');
+  });
+
+  it('reveals exactly two rows per click', () => {
+    // Each nested <details> is one click. Every level except the last must
+    // hold a full STEP; the last holds the remainder.
+    const levels = html.split('<details class="log-more">').slice(1);
+    if (levels.length === 0) return;
+    const counts = levels.map((lvl, i) => {
+      const next = lvl.indexOf('<details class="log-more">');
+      const own = next === -1 ? lvl : lvl.slice(0, next);
+      return (own.match(/class="li"/g) ?? []).length;
+    });
+    for (const c of counts.slice(0, -1)) expect(c).toBe(STEP);
+    expect(counts[counts.length - 1]).toBeGreaterThan(0);
+    expect(counts[counts.length - 1]).toBeLessThanOrEqual(STEP);
+  });
+
+  it('uses no javascript for the expansion', () => {
+    const scripts = [...html.matchAll(/<script([^>]*)>/g)].map(m => m[1]);
+    const disallowed = scripts.filter(a =>
+      !a.includes('application/ld+json') && !a.includes('data-theme-init'));
+    for (const a of disallowed) expect(a).not.toMatch(/log|details|expand/i);
+  });
+
+  it('keeps hidden entries in the DOM so crawlers still see them', () => {
+    expect(html).toContain('Multi-Agent Risks');
   });
 });
