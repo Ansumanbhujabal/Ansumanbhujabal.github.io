@@ -25,14 +25,21 @@ describe('reading log', () => {
     const expected = Math.min(files.length, SITE_CONFIG.logLimit);
     expect((html.match(/class="li"/g) ?? []).length).toBe(expected);
   });
-  it('links every entry to its source, in a new tab', () => {
-    for (const href of LINKS) {
-      const re = new RegExp(`<a[^>]*href="${href.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}"[^>]*>`);
-      const m = html.match(re);
-      expect(m, `missing link ${href}`).not.toBeNull();
-      expect(m![0]).toContain('target="_blank"');
-      expect(m![0]).toContain('rel="noopener noreferrer"');
+  it('links every rendered entry to its source, in a new tab', () => {
+    // Derived from what actually rendered, not a pinned URL list: the log
+    // caps at SITE_CONFIG.logLimit, so the oldest entries roll off the page
+    // as new ones are added and a hardcoded list goes stale on its own.
+    const cards = html.match(/<div class="li">[\s\S]*?<\/div>\s*<\/div>/g) ?? [];
+    expect(cards.length).toBeGreaterThan(0);
+    let linked = 0;
+    for (const card of cards) {
+      const a = card.match(/<a[^>]*href="https?:[^"]*"[^>]*>/);
+      if (!a) continue;
+      linked++;
+      expect(a[0]).toContain('target="_blank"');
+      expect(a[0]).toContain('rel="noopener noreferrer"');
     }
+    expect(linked).toBe(cards.length);
   });
   it('carries no tracking parameters', () => {
     expect(html).not.toContain('utm_source=bluedot-impact');
