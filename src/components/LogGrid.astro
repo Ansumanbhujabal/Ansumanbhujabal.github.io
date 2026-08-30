@@ -2,9 +2,16 @@
 import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '../lib/display.ts';
 import { render } from 'astro:content';
+import LogMore from './LogMore.astro';
 interface Props { entries: CollectionEntry<'log'>[] }
 const { entries } = Astro.props;
 const rendered = await Promise.all(entries.map(async e => ({ e, Content: (await render(e)).Content })));
+const VISIBLE = 6;   // first screenful
+const STEP = 4;      // two rows of the two-column grid per click
+const shown = rendered.slice(0, VISIBLE);
+const hidden = rendered.slice(VISIBLE);
+const chunks = Array.from({ length: Math.ceil(hidden.length / STEP) },
+  (_, i) => hidden.slice(i * STEP, i * STEP + STEP));
 ---
 {entries.length > 0 && (
 <section id="log"><img class="log-cat" src="/yuuko-bird-explosion.gif" alt="" aria-hidden="true" width="130" height="304" loading="lazy" decoding="async"/><div class="c">
@@ -14,7 +21,7 @@ const rendered = await Promise.all(entries.map(async e => ({ e, Content: (await 
     <p>Updated whenever something happens. Read, built, learned, watched.</p>
   </div>
   <div class="log">
-    {rendered.map(({ e, Content }) => (
+    {shown.map(({ e, Content }) => (
       <div class="li">
         <div class="m"><i>{e.data.kind}</i><span>{formatDate(e.data.date)}</span></div>
         <h4>{e.data.url ? <a href={e.data.url} target="_blank" rel="noopener noreferrer">{e.data.title}</a> : e.data.title}</h4>
@@ -22,5 +29,6 @@ const rendered = await Promise.all(entries.map(async e => ({ e, Content: (await 
       </div>
     ))}
   </div>
+  {chunks.length > 0 && <LogMore chunks={chunks} />}
 </div></section>
 )}
