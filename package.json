@@ -7,6 +7,7 @@
     "build": "astro build",
     "preview": "astro preview",
     "fetch": "tsx scripts/fetch-data.mjs",
+    "ingest:reading": "tsx scripts/ingest-reading.ts",
     "test": "vitest run"
   },
   "dependencies": {
