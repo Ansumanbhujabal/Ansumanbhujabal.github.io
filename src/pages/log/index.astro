@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import LogArchive from '../../components/log/LogArchive.astro';
+import { loadLogViews } from '../../lib/log/collection';
+import { paginateLogs } from '../../lib/log/query';
+const entries = await loadLogViews();
+const pages = paginateLogs(entries, 25);
+---
+<Base title="Reading Log — Ansuman SS Bhujabala" description="A public research notebook covering AI safety, agents, evaluation, retrieval, and systems engineering.">
+  <Nav />
+  <main class="archive-shell"><header><span class="eyebrow">Research notebook</span><h1 class="disp" id="archive-title">Reading Log</h1><p>{entries.length} notes and papers logged.</p></header><LogArchive entries={pages[0] ?? []} allEntries={entries} pageCount={pages.length || 1} /></main>
+  <Footer />
+</Base>

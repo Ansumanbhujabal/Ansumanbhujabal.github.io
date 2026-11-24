@@ -1,0 +1,14 @@
+---
+import type { LogView } from '../../lib/log/types';
+import { formatDate } from '../../lib/display';
+interface Props { entry: LogView }
+const { entry } = Astro.props;
+---
+<article class="log-row" data-log-row data-search={`${entry.title} ${entry.description} ${entry.source} ${entry.category} ${entry.tags.join(' ')}`.toLowerCase()}>
+  <div class="log-row-meta"><time datetime={entry.date.toISOString()}>{formatDate(entry.date)}</time><span>{entry.contentType}</span></div>
+  <div>
+    <h2><a href={`/log/${entry.slug}/`}>{entry.title}</a></h2>
+    <p>{entry.description || entry.synopsis}</p>
+  </div>
+  <div class="log-row-source"><span>{entry.source}</span>{entry.tags.length > 0 && <div class="log-tags">{entry.tags.map(tag => <span>{tag}</span>)}</div>}</div>
+</article>
