@@ -1,0 +1,21 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../../layouts/Base.astro';
+import Nav from '../../../../components/Nav.astro';
+import Footer from '../../../../components/Footer.astro';
+import LogArchive from '../../../../components/log/LogArchive.astro';
+import { loadLogViews } from '../../../../lib/log/collection';
+import { categorySlug, paginateLogs } from '../../../../lib/log/query';
+export const getStaticPaths = (async () => {
+  const allEntries = await loadLogViews();
+  const categories = [...new Set(allEntries.map(entry => entry.category))];
+  return categories.map(category => {
+    const matching = allEntries.filter(entry => entry.category === category);
+    const pages = paginateLogs(matching, 25);
+    return { params: { category: categorySlug(category) }, props: { category, entries: pages[0] ?? [], allEntries, pageCount: pages.length || 1 } };
+  });
+}) satisfies GetStaticPaths;
+const { category, entries, allEntries, pageCount } = Astro.props;
+const basePath = `/log/category/${categorySlug(category)}`;
+---
+<Base title={`${category} Reading — Ansuman SS Bhujabala`} description={`Reading notes categorized under ${category}.`}><Nav /><main class="archive-shell"><header><span class="eyebrow">Category</span><h1 class="disp" id="archive-title">{category}</h1></header><LogArchive entries={entries} allEntries={allEntries} pageCount={pageCount} basePath={basePath} /></main><Footer /></Base>

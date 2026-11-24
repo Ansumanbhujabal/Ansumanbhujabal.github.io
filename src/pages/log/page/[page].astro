@@ -1,0 +1,17 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../layouts/Base.astro';
+import Nav from '../../../components/Nav.astro';
+import Footer from '../../../components/Footer.astro';
+import LogArchive from '../../../components/log/LogArchive.astro';
+import { loadLogViews } from '../../../lib/log/collection';
+import { paginateLogs } from '../../../lib/log/query';
+export const getStaticPaths = (async () => {
+  const allEntries = await loadLogViews();
+  const pages = paginateLogs(allEntries, 25);
+  return pages.slice(1).map((entries, index) => ({ params: { page: String(index + 2) }, props: { entries, allEntries, pageCount: pages.length } }));
+}) satisfies GetStaticPaths;
+const { entries, allEntries, pageCount } = Astro.props;
+const currentPage = Number(Astro.params.page);
+---
+<Base title={`Reading Log — Page ${currentPage}`} description="Earlier entries from Ansuman's public AI engineering and safety research notebook."><Nav /><main class="archive-shell"><header><span class="eyebrow">Research notebook</span><h1 class="disp" id="archive-title">Reading Log</h1></header><LogArchive entries={entries} allEntries={allEntries} currentPage={currentPage} pageCount={pageCount} /></main><Footer /></Base>

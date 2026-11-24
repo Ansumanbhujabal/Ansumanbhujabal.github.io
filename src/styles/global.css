@@ -185,3 +185,23 @@ footer{padding:2.2rem 0 3rem}
 .log-more[open]>summary .less{display:inline}
 .log-more .log{margin-top:1rem}
 .log-more .log-more{margin-top:1rem}
+
+/* Reading archive */
+.archive-shell{width:min(76rem,calc(100% - 2rem));margin:0 auto;padding:8rem 0 5rem}
+.archive-shell>header{max-width:52rem;margin-bottom:2.5rem}
+.log-archive{display:grid;gap:1.5rem}
+.log-toolbar{display:flex;gap:1rem;align-items:end;flex-wrap:wrap;padding:1rem;border:1px solid var(--line);background:var(--surface)}
+.log-toolbar label{display:grid;gap:.35rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}
+.log-toolbar input{min-width:min(28rem,70vw)}
+.log-toolbar input,.log-toolbar select{border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:.7rem .8rem;font:inherit}
+.log-categories{display:flex;gap:.55rem;flex-wrap:wrap}
+.log-categories a,.log-tags span{border:1px solid var(--line);padding:.35rem .6rem;font-size:.78rem;text-decoration:none}
+.log-month{display:grid;gap:.75rem;margin-top:1.5rem}.log-month>h2{font-size:.9rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.log-row{display:grid;grid-template-columns:9rem minmax(0,1fr) 13rem;gap:1rem;padding:1rem 0;border-top:1px solid var(--line)}
+.log-row h2{font-size:1.05rem;margin:0 0 .35rem}.log-row p{margin:0;color:var(--muted)}
+.log-row-meta,.log-row-source{display:grid;align-content:start;gap:.35rem;font-size:.78rem;color:var(--muted)}
+.log-tags{display:flex;gap:.3rem;flex-wrap:wrap}.log-tags span{padding:.2rem .4rem}
+.log-pagination{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:1rem}
+.log-pagination a{font-weight:700}.log-empty{padding:2rem;border:1px dashed var(--line)}
+.log-toolbar :focus-visible,.log-categories a:focus-visible,.log-pagination a:focus-visible,.log-row a:focus-visible{outline:3px solid var(--ac);outline-offset:3px}
+@media(max-width:52rem){.log-row{grid-template-columns:1fr}.log-row-meta{display:flex;justify-content:space-between}.log-toolbar input{min-width:0;width:100%}.log-toolbar label:first-child{flex:1 1 100%}}
