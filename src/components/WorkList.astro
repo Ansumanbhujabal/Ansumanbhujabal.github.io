@@ -5,6 +5,7 @@ import { resolveArtSlug } from '../lib/project-art.ts';
 interface Props { projects: CollectionEntry<'projects'>[] }
 const { projects } = Astro.props;
 const pad = (n: number) => String(n).padStart(2, '0');
+const projectSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 ---
 {projects.length > 0 && (
 <section id="work"><img class="work-cat" src="/hakase-shark-bite.gif" alt="" aria-hidden="true" width="180" height="135" loading="lazy" decoding="async"/><div class="c-wide">
@@ -15,7 +16,7 @@ const pad = (n: number) => String(n).padStart(2, '0');
   </div>
   <div class="grid">
     {projects.map(p => (
-      <article class="pc">
+      <article class="pc" id={`project-${projectSlug(p.data.name)}`}>
         <div class="pc-art"><ProjectArt slug={resolveArtSlug(p.data.name)} /></div>
         <div class="pc-head">
           <span class="pc-no">{pad(p.data.order)}</span>
