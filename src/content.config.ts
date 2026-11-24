@@ -1,5 +1,6 @@
 import { defineCollection, z } from 'astro:content';
 import { glob } from 'astro/loaders';
+import { logSchema } from './lib/log/schema';
 
 export const projectSchema = z.object({
   name: z.string(),
@@ -11,13 +12,6 @@ export const projectSchema = z.object({
   summary: z.string().min(1),
   story: z.string().optional(),
   metrics: z.array(z.string()).optional(),
-});
-
-export const logSchema = z.object({
-  date: z.coerce.date(),
-  kind: z.enum(['read', 'built', 'learned', 'watched']),
-  title: z.string().min(1),
-  url: z.string().url().optional(),
 });
 
 export const timelineSchema = z.object({
