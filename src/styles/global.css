@@ -205,3 +205,7 @@ footer{padding:2.2rem 0 3rem}
 .log-pagination a{font-weight:700}.log-empty{padding:2rem;border:1px dashed var(--line)}
 .log-toolbar :focus-visible,.log-categories a:focus-visible,.log-pagination a:focus-visible,.log-row a:focus-visible{outline:3px solid var(--ac);outline-offset:3px}
 @media(max-width:52rem){.log-row{grid-template-columns:1fr}.log-row-meta{display:flex;justify-content:space-between}.log-toolbar input{min-width:0;width:100%}.log-toolbar label:first-child{flex:1 1 100%}}
+.reading-note-shell{width:min(52rem,calc(100% - 2rem));margin:0 auto;padding:8rem 0 5rem}
+.reading-note{display:grid;gap:2rem}.reading-note header{display:grid;gap:.8rem}.reading-note h1{font-size:clamp(2.4rem,7vw,5.5rem);line-height:.95}
+.reading-note-source,.reading-note-disclosure{color:var(--muted)}.reading-note-body{font-size:1.2rem;line-height:1.75}
+.reading-note section{border-top:1px solid var(--line);padding-top:1.5rem}.reading-note-nav{border-top:1px solid var(--line);padding-top:1.5rem;display:flex;justify-content:space-between;gap:2rem}

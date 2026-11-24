@@ -19,6 +19,8 @@ export function buildLlmsTxt(projects: LlmsProject[]): string {
     '- GitHub: https://github.com/Ansumanbhujabal',
     '- LinkedIn: https://www.linkedin.com/in/ansuman-simanta-sekhar-bhujabala',
     '- Résumé: https://ansumanbhujabal.github.io/resume.pdf',
+    '- Reading log: https://ansumanbhujabal.github.io/log/',
+    '- Reading log RSS: https://ansumanbhujabal.github.io/log/rss.xml',
     '',
     '## Experience',
     '',

@@ -1,0 +1,24 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import Nav from '../../components/Nav.astro';
+import Footer from '../../components/Footer.astro';
+import LogEntry from '../../components/log/LogEntry.astro';
+import { loadLogViews } from '../../lib/log/collection';
+import { relatedLogs } from '../../lib/log/query';
+export const getStaticPaths = (async () => {
+  const entries = await loadLogViews();
+  return entries.map((entry, index) => ({ params: { slug: entry.slug }, props: { entry, related: relatedLogs(entry, entries), previous: entries[index + 1] ?? null, next: entries[index - 1] ?? null } }));
+}) satisfies GetStaticPaths;
+const { entry, related, previous, next } = Astro.props;
+const pageUrl = new URL(`/log/${entry.slug}/`, Astro.site).href;
+const jsonLd = [
+  { '@context': 'https://schema.org', '@type': 'BlogPosting', headline: entry.title, description: entry.description, url: pageUrl, datePublished: entry.date.toISOString(), author: { '@type': 'Person', name: 'Ansuman SS Bhujabala', url: new URL('/', Astro.site).href }, isBasedOn: entry.canonicalSourceUrl ?? entry.url },
+  { '@context': 'https://schema.org', '@type': 'BreadcrumbList', itemListElement: [
+    { '@type': 'ListItem', position: 1, name: 'Home', item: new URL('/', Astro.site).href },
+    { '@type': 'ListItem', position: 2, name: 'Reading Log', item: new URL('/log/', Astro.site).href },
+    { '@type': 'ListItem', position: 3, name: entry.title, item: pageUrl },
+  ] },
+];
+---
+<Base title={`${entry.title} — Ansuman SS Bhujabala`} description={entry.description || entry.synopsis} image={entry.image ?? undefined} type="article" robots={entry.indexable ? 'index,follow' : 'noindex,follow'} jsonLd={jsonLd}><Nav /><main class="reading-note-shell"><LogEntry {entry} {related} {previous} {next} /></main><Footer /></Base>
