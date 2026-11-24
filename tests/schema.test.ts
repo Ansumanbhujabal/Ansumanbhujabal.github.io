@@ -36,6 +36,7 @@ describe('schema drift', () => {
   it('keeps content.config.ts statuses in sync with the test schema', () => {
     const src = readFileSync('src/content.config.ts', 'utf8');
     expect(src).toContain("z.enum(['live', 'running', 'research', 'shipped', 'early access'])");
-    expect(src).toContain("z.enum(['read', 'built', 'learned', 'watched'])");
+    const logSrc = readFileSync('src/lib/log/schema.ts', 'utf8');
+    expect(logSrc).toContain("z.enum(['read', 'built', 'learned', 'watched'])");
   });
 });
