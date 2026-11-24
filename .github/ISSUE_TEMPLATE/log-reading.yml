@@ -1,0 +1,16 @@
+name: Log something I read
+description: Paste one URL and publish it to the reading log automatically.
+title: "[Reading] "
+labels: ["reading-link"]
+body:
+  - type: markdown
+    attributes:
+      value: "This issue publishes automatically after extraction, validation, and a successful site build."
+  - type: input
+    id: url
+    attributes:
+      label: URL
+      description: Public HTTPS link to the paper, article, video, or repository.
+      placeholder: https://example.com/article
+    validations:
+      required: true
