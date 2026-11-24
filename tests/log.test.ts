@@ -18,12 +18,9 @@ const LINKS = [
 ];
 
 describe('reading log', () => {
-  it('renders every log entry, capped at the configured limit', () => {
-    // Derived, not hardcoded: a fixed count silently rots every time an
-    // entry is added. The log is uncapped, so every entry on disk renders.
+  it('renders the configured homepage preview', () => {
     const files = readdirSync('src/content/log').filter(f => f.endsWith('.md'));
-    const expected = Math.min(files.length, SITE_CONFIG.logLimit);
-    expect((html.match(/class="li"/g) ?? []).length).toBe(expected);
+    expect((html.match(/class="li"/g) ?? []).length).toBe(Math.min(files.length, SITE_CONFIG.homeLogLimit));
   });
   it('links every rendered entry to its source, in a new tab', () => {
     // Derived from what actually rendered, not a pinned URL list: the log
@@ -50,40 +47,16 @@ describe('reading log', () => {
   });
 });
 
-describe('log expansion', () => {
-  const STEP = 4;      // two rows of the two-column grid
-  const VISIBLE = 6;   // shown before any click
-
-  it('shows six entries up front, rest behind nested details', () => {
+describe('homepage log preview', () => {
+  it('shows exactly six entries and the archive total', () => {
     const files = readdirSync('src/content/log').filter(f => f.endsWith('.md'));
-    expect((html.match(/class="li"/g) ?? []).length).toBe(files.length);
-    if (files.length <= VISIBLE) return;
-    expect(html).toContain('<details class="log-more">');
+    expect((html.match(/class="li"/g) ?? []).length).toBe(Math.min(6, files.length));
+    expect(html).toContain(`${files.length} notes and papers logged`);
   });
-
-  it('reveals exactly two rows per click', () => {
-    // Each nested <details> is one click. Every level except the last must
-    // hold a full STEP; the last holds the remainder.
-    const levels = html.split('<details class="log-more">').slice(1);
-    if (levels.length === 0) return;
-    const counts = levels.map((lvl, i) => {
-      const next = lvl.indexOf('<details class="log-more">');
-      const own = next === -1 ? lvl : lvl.slice(0, next);
-      return (own.match(/class="li"/g) ?? []).length;
-    });
-    for (const c of counts.slice(0, -1)) expect(c).toBe(STEP);
-    expect(counts[counts.length - 1]).toBeGreaterThan(0);
-    expect(counts[counts.length - 1]).toBeLessThanOrEqual(STEP);
-  });
-
-  it('uses no javascript for the expansion', () => {
-    const scripts = [...html.matchAll(/<script([^>]*)>/g)].map(m => m[1]);
-    const disallowed = scripts.filter(a =>
-      !a.includes('application/ld+json') && !a.includes('data-theme-init'));
-    for (const a of disallowed) expect(a).not.toMatch(/log|details|expand/i);
-  });
-
-  it('keeps hidden entries in the DOM so crawlers still see them', () => {
-    expect(html).toContain('Multi-Agent Risks');
+  it('links to the archive and has no recursive expansion', () => {
+    expect(html).toContain('href="/log/"');
+    expect(html).toContain('Explore all reading');
+    expect(html).not.toContain('log-more');
+    expect(html).not.toContain('Show ');
   });
 });
