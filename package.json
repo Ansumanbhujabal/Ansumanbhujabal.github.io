@@ -12,7 +12,8 @@
   "dependencies": {
     "@astrojs/rss": "^4.0.19",
     "@astrojs/sitemap": "^3.2.0",
-    "astro": "^5.0.0"
+    "astro": "^5.0.0",
+    "ipaddr.js": "^2.5.0"
   },
   "devDependencies": {
     "tsx": "^4.19.0",
