@@ -111,7 +111,7 @@ An `issues` workflow runs when an issue is opened or relabeled. Before checking 
 - The issue has the `reading-link` label.
 - The form payload contains exactly one parseable public HTTPS URL.
 
-Required workflow permissions are declared explicitly and minimally. Expected permissions are `contents: write`, `issues: write`, and `copilot-requests: write` for the ingestion job. No pull-request permission is required for the direct-publish design.
+Required workflow permissions are declared explicitly and minimally. The ingestion job needs `contents: write` and `issues: write`; no pull-request permission is required for the direct-publish design. Because this is a personally owned repository, Copilot CLI authenticates through a fine-grained personal token with the account-level **Copilot Requests** permission, stored as the `COPILOT_GITHUB_TOKEN` Actions secret. The built-in `GITHUB_TOKEN` remains responsible only for repository and issue operations.
 
 ### 6.2 URL safety and normalization
 
@@ -146,7 +146,7 @@ GitHub Copilot in Actions is the preferred enrichment path. The fetched page is 
 
 Generated output is parsed, length-bounded, stripped of markup where inappropriate, and validated independently. The workflow does not accept generated URLs, file paths, shell fragments, or workflow instructions.
 
-The implementation must first verify that `copilot-requests` is available for this account and repository. Copilot usage depends on the account's active plan and GitHub policy; it is not treated as an unconditional free service.
+The implementation must first verify that Copilot CLI access is available for the account and that the `COPILOT_GITHUB_TOKEN` secret is configured. Copilot usage depends on the account's active plan, premium-request allowance, and GitHub policy; it is not treated as an unconditional free service. A missing, expired, or unauthorized token immediately selects deterministic fallback and never blocks publication.
 
 ### 6.5 Deterministic fallback
 
