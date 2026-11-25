@@ -1,6 +1,6 @@
 name: Log something I read
 description: Paste one URL and publish it to the reading log automatically.
-title: "[Reading] "
+title: "Reading link to publish"
 labels: ["reading-link"]
 body:
   - type: markdown
