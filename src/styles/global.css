@@ -174,14 +174,39 @@ footer{padding:2.2rem 0 3rem}
     color:var(--ac);margin:0 0 1rem;display:flex;align-items:baseline;gap:.5rem}
 .coll-h--anime{margin-top:.4rem}
 .coll-n{color:var(--mu);letter-spacing:0}
-.log-more{margin-top:1rem}
-.log-more>summary{list-style:none;cursor:pointer;display:inline-block;
-  font-family:var(--fm);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;
-  color:var(--mu);border:1px solid var(--bd);border-radius:2px;padding:.42rem .85rem;transition:.15s}
-.log-more>summary::-webkit-details-marker{display:none}
-.log-more>summary:hover{border-color:var(--ac);color:var(--ac)}
-.log-more>summary .less{display:none}
-.log-more[open]>summary .more{display:none}
-.log-more[open]>summary .less{display:inline}
-.log-more .log{margin-top:1rem}
-.log-more .log-more{margin-top:1rem}
+.log-source{display:inline-block;margin-top:.75rem;font-size:.8rem;font-weight:700}
+.log-archive-cta{display:flex;justify-content:space-between;align-items:center;gap:1rem;margin-top:1.25rem}
+@media(max-width:40rem){.log-archive-cta{align-items:flex-start;flex-direction:column}}
+
+/* Reading archive */
+.archive-shell{width:min(76rem,calc(100% - 2rem));margin:0 auto;padding:8rem 0 5rem}
+.archive-shell>header{max-width:52rem;margin-bottom:2.5rem}
+.log-archive{display:grid;gap:1.5rem}
+.log-toolbar{display:flex;gap:1rem;align-items:end;flex-wrap:wrap;padding:1rem;border:1px solid var(--line);background:var(--surface)}
+.log-toolbar label{display:grid;gap:.35rem;font-size:.8rem;text-transform:uppercase;letter-spacing:.08em}
+.log-toolbar input{min-width:min(28rem,70vw)}
+.log-toolbar input,.log-toolbar select{border:1px solid var(--line);background:var(--bg);color:var(--fg);padding:.7rem .8rem;font:inherit}
+.log-categories{display:flex;gap:.55rem;flex-wrap:wrap}
+.log-categories a,.log-tags span{border:1px solid var(--line);padding:.35rem .6rem;font-size:.78rem;text-decoration:none}
+.log-month{display:grid;gap:.75rem;margin-top:1.5rem}.log-month>h2{font-size:.9rem;text-transform:uppercase;letter-spacing:.12em;color:var(--muted)}
+.log-row{display:grid;grid-template-columns:9rem minmax(0,1fr) 13rem;gap:1rem;padding:1rem 0;border-top:1px solid var(--line)}
+.log-row h2{font-size:1.05rem;margin:0 0 .35rem}.log-row p{margin:0;color:var(--muted)}
+.log-row-meta,.log-row-source{display:grid;align-content:start;gap:.35rem;font-size:.78rem;color:var(--muted)}
+.log-tags{display:flex;gap:.3rem;flex-wrap:wrap}.log-tags span{padding:.2rem .4rem}
+.log-pagination{display:flex;justify-content:space-between;align-items:center;border-top:1px solid var(--line);padding-top:1rem}
+.log-pagination a{font-weight:700}.log-empty{padding:2rem;border:1px dashed var(--line)}
+.log-toolbar :focus-visible,.log-categories a:focus-visible,.log-pagination a:focus-visible,.log-row a:focus-visible{outline:3px solid var(--ac);outline-offset:3px}
+@media(max-width:52rem){.log-row{grid-template-columns:1fr}.log-row-meta{display:flex;justify-content:space-between}.log-toolbar input{min-width:0;width:100%}.log-toolbar label:first-child{flex:1 1 100%}}
+.reading-note-shell{width:min(52rem,calc(100% - 2rem));margin:0 auto;padding:8rem 0 5rem}
+.reading-note{display:grid;gap:2rem}.reading-note header{display:grid;gap:.8rem}.reading-note h1{font-size:clamp(2.4rem,7vw,5.5rem);line-height:.95}
+.reading-note-source,.reading-note-disclosure{color:var(--muted)}.reading-note-body{font-size:1.2rem;line-height:1.75}
+.reading-note section{border-top:1px solid var(--line);padding-top:1.5rem}.reading-note-nav{border-top:1px solid var(--line);padding-top:1.5rem;display:flex;justify-content:space-between;gap:2rem}
+
+/* The archive uses the site's existing light and dark theme tokens. */
+.archive-shell .log-archive,.archive-shell .log-month{padding:0;border-bottom:0}
+.log-archive [hidden]{display:none!important}
+.log-toolbar,.log-row,.log-pagination,.reading-note section,.reading-note-nav{border-color:var(--bd)}
+.log-toolbar{background:var(--sf)}
+.log-toolbar input,.log-toolbar select{border-color:var(--bd);background:var(--bg);color:var(--tx)}
+.log-toolbar label,.log-row-meta,.log-row-source,.log-row p,.log-month>h2,.reading-note-source,.reading-note-disclosure{color:var(--mu)}
+.log-categories a,.log-tags span,.log-empty{border-color:var(--bd)}

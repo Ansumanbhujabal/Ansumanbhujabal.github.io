@@ -1,0 +1,21 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../../../../layouts/Base.astro';
+import Nav from '../../../../../components/Nav.astro';
+import Footer from '../../../../../components/Footer.astro';
+import LogArchive from '../../../../../components/log/LogArchive.astro';
+import { loadLogViews } from '../../../../../lib/log/collection';
+import { categorySlug, paginateLogs } from '../../../../../lib/log/query';
+export const getStaticPaths = (async () => {
+  const allEntries = await loadLogViews();
+  const categories = [...new Set(allEntries.map(entry => entry.category))];
+  return categories.flatMap(category => {
+    const pages = paginateLogs(allEntries.filter(entry => entry.category === category), 25);
+    return pages.slice(1).map((entries, index) => ({ params: { category: categorySlug(category), page: String(index + 2) }, props: { category, entries, allEntries, pageCount: pages.length } }));
+  });
+}) satisfies GetStaticPaths;
+const { category, entries, allEntries, pageCount } = Astro.props;
+const currentPage = Number(Astro.params.page);
+const basePath = `/log/category/${categorySlug(category)}`;
+---
+<Base title={`${category} Reading — Page ${currentPage}`} description={`Earlier reading notes categorized under ${category}.`}><Nav /><main class="archive-shell"><header><span class="eyebrow">Category</span><h1 class="disp" id="archive-title">{category}</h1></header><LogArchive entries={entries} allEntries={allEntries} currentPage={currentPage} pageCount={pageCount} basePath={basePath} category={category} /></main><Footer /></Base>

@@ -1,0 +1,23 @@
+---
+import type { LogView } from '../../lib/log/types';
+import { formatDate } from '../../lib/display';
+import { LOG_PROJECT_LINKS } from '../../data/log-project-links';
+interface Props { entry: LogView; related: LogView[]; previous: LogView | null; next: LogView | null }
+const { entry, related, previous, next } = Astro.props;
+const topics = new Set([entry.category, ...entry.tags]);
+const projects = LOG_PROJECT_LINKS.filter(project => project.topics.some(topic => topics.has(topic)));
+---
+<article class="reading-note">
+  <header>
+    <p class="eyebrow">{entry.contentType} · logged {formatDate(entry.date)}</p>
+    <h1 class="disp">{entry.title}</h1>
+    <p class="reading-note-source">{entry.author && <span>{entry.author} · </span>}{entry.source}{entry.publishedAt && <span> · {formatDate(entry.publishedAt)}</span>}</p>
+  </header>
+  <div class="reading-note-body"><p>{entry.synopsis || entry.description}</p></div>
+  {entry.tags.length > 0 && <div class="log-tags">{entry.tags.map(tag => <span>{tag}</span>)}</div>}
+  {entry.url && <p><a class="btn" href={entry.url} target="_blank" rel="noopener noreferrer">Read the original ↗</a></p>}
+  {entry.generation !== 'manual' && <p class="reading-note-disclosure">This synopsis was {entry.generation === 'copilot' ? 'generated' : 'derived'} automatically from the linked source.</p>}
+  {related.length > 0 && <section><h2>Related reading</h2><ul>{related.map(item => <li><a href={`/log/${item.slug}/`}>{item.title}</a></li>)}</ul></section>}
+  {projects.length > 0 && <section><h2>Related projects</h2><ul>{projects.map(project => <li><a href={project.href}>{project.project}</a></li>)}</ul></section>}
+  <nav class="reading-note-nav" aria-label="Adjacent log entries">{previous ? <a href={`/log/${previous.slug}/`}>← {previous.title}</a> : <span />}{next ? <a href={`/log/${next.slug}/`}>{next.title} →</a> : <span />}</nav>
+</article>

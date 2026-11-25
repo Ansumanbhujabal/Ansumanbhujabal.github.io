@@ -1,0 +1,186 @@
+name: Ingest reading link
+
+on:
+  issues:
+    types: [opened, labeled]
+  schedule:
+    - cron: '15 7 * * *'
+
+permissions:
+  contents: write
+  issues: write
+
+concurrency:
+  group: reading-log-publish
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.event.issue.user.login == 'Ansumanbhujabal' &&
+      github.event_name == 'issues' &&
+      contains(github.event.issue.labels.*.name, 'reading-link')
+    runs-on: ubuntu-latest
+    outputs:
+      commit_sha: ${{ steps.commit.outputs.commit_sha }}
+      slug: ${{ steps.result.outputs.slug }}
+      status: ${{ steps.result.outputs.status }}
+      generation: ${{ steps.result.outputs.generation }}
+    steps:
+      - name: Create lifecycle labels
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh label create reading-link --repo "$GITHUB_REPOSITORY" --color 0969da --force
+          gh label create processing --repo "$GITHUB_REPOSITORY" --color fbca04 --force
+          gh label create published --repo "$GITHUB_REPOSITORY" --color 0e8a16 --force
+          gh label create published-with-fallback --repo "$GITHUB_REPOSITORY" --color bfdadc --force
+          gh label create duplicate --repo "$GITHUB_REPOSITORY" --color c5def5 --force
+          gh label create failed --repo "$GITHUB_REPOSITORY" --color d73a4a --force
+          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --add-label processing
+
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Copilot CLI when configured
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: if [ -n "$COPILOT_GITHUB_TOKEN" ]; then npm install -g @github/copilot; fi
+
+      - name: Read issue body
+        run: jq -r '.issue.body' "$GITHUB_EVENT_PATH" > "$RUNNER_TEMP/reading-issue.txt"
+
+      - name: Generate reading entry
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: npm run ingest:reading -- --issue-body-file "$RUNNER_TEMP/reading-issue.txt" --output-dir src/content/log --result-file "$RUNNER_TEMP/reading-result.json"
+
+      - name: Read result
+        id: result
+        run: |
+          echo "status=$(jq -r .status "$RUNNER_TEMP/reading-result.json")" >> "$GITHUB_OUTPUT"
+          echo "slug=$(jq -r .slug "$RUNNER_TEMP/reading-result.json")" >> "$GITHUB_OUTPUT"
+          echo "generation=$(jq -r '.generation // ""' "$RUNNER_TEMP/reading-result.json")" >> "$GITHUB_OUTPUT"
+          echo "file=$(jq -r '.file // ""' "$RUNNER_TEMP/reading-result.json")" >> "$GITHUB_OUTPUT"
+
+      - name: Validate generated site
+        if: steps.result.outputs.status == 'published'
+        run: |
+          npm test
+          npm run build
+          node scripts/check-links.mjs dist
+
+      - name: Commit and push entry
+        id: commit
+        if: steps.result.outputs.status == 'published'
+        env:
+          GENERATED_FILE: ${{ steps.result.outputs.file }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -- "src/content/log/$GENERATED_FILE"
+          git commit -m "content: log reading ${{ steps.result.outputs.slug }}"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+      - name: Report duplicate
+        if: steps.result.outputs.status == 'duplicate'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --body "Already logged: https://ansumanbhujabal.github.io/log/${{ steps.result.outputs.slug }}/"
+          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label duplicate --state closed
+
+      - name: Report failure
+        if: failure()
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh issue comment "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --body "Automatic publication failed. See the linked Actions run for the exact stage."
+          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label failed
+
+  deploy:
+    needs: publish
+    if: needs.publish.outputs.status == 'published'
+    uses: ./.github/workflows/deploy.yml
+    with:
+      ref: ${{ needs.publish.outputs.commit_sha }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+  report-published:
+    needs: [publish, deploy]
+    if: needs.publish.outputs.status == 'published' && needs.deploy.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close published issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          label=published
+          if [ "${{ needs.publish.outputs.generation }}" = fallback ]; then label=published-with-fallback; fi
+          gh issue comment "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --body "Published: https://ansumanbhujabal.github.io/log/${{ needs.publish.outputs.slug }}/"
+          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label "$label" --state closed
+
+  retry:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    outputs:
+      commit_sha: ${{ steps.commit.outputs.commit_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Retry fallback notes
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: |
+          if [ -n "$COPILOT_GITHUB_TOKEN" ]; then npm install -g @github/copilot; fi
+          npm run retry:readings
+      - name: Verify updates
+        run: |
+          npm test
+          npm run build
+          node scripts/check-links.mjs dist
+      - name: Commit updates
+        id: commit
+        run: |
+          git add src/content/log
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "content: refresh fallback reading notes"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  deploy-retries:
+    needs: retry
+    if: needs.retry.outputs.commit_sha != ''
+    uses: ./.github/workflows/deploy.yml
+    with:
+      ref: ${{ needs.retry.outputs.commit_sha }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write

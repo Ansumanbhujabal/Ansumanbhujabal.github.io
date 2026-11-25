@@ -17,7 +17,8 @@ import { SITE_CONFIG } from '../lib/config.ts';
 import type { Watching } from '../lib/fetchers/anilist.ts';
 
 const projects = (await getCollection('projects')).sort((a, b) => a.data.order - b.data.order);
-const logEntries = recentLog(await getCollection('log'), SITE_CONFIG.logLimit);
+const allLogEntries = recentLog(await getCollection('log'), Number.POSITIVE_INFINITY);
+const logEntries = allLogEntries.slice(0, SITE_CONFIG.homeLogLimit);
 const timeline = (await getCollection('timeline')).sort((a, b) => a.data.order - b.data.order);
 
 const watchingData = readCache<Watching>('anilist');
@@ -39,7 +40,7 @@ const rows = liveFields({
   <Timeline entries={timeline} />
   <Capabilities />
   <WorkList projects={projects} />
-  <LogGrid entries={logEntries} />
+  <LogGrid entries={logEntries} total={allLogEntries.length} />
   <Reading />
   <Cta />
   <Footer />

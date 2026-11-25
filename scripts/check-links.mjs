@@ -1,4 +1,6 @@
 import { pathToFileURL } from 'node:url';
+import { statSync, readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 export function checkLinks(html) {
   const bad = [];
@@ -15,13 +17,19 @@ export function checkLinks(html) {
 // otherwise trip this block into CLI mode and blow up trying to read a file
 // named "run".
 if (process.argv[1] && import.meta.url === pathToFileURL(process.argv[1]).href) {
-  const { readFileSync } = await import('node:fs');
   const target = process.argv[2];
   if (!target) {
     console.error('[links] usage: node scripts/check-links.mjs <file.html>');
     process.exit(1);
   }
-  const bad = checkLinks(readFileSync(target, 'utf8'));
+  const files = [];
+  function visit(path) {
+    if (statSync(path).isDirectory()) {
+      for (const name of readdirSync(path)) visit(join(path, name));
+    } else if (path.endsWith('.html')) files.push(path);
+  }
+  visit(target);
+  const bad = files.flatMap(file => checkLinks(readFileSync(file, 'utf8')).map(href => `${file}: ${href}`));
   if (bad.length) {
     console.error(`[links] ${bad.length} placeholder or empty href(s) found`);
     process.exit(1);

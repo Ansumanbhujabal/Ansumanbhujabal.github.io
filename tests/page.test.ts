@@ -60,7 +60,7 @@ describe('rendered page', () => {
     expect(html).toContain('class="cta-cat" src="/yuuko-icecream.gif"');
   });
   it('uses absolute dates and no relative time', () => {
-    expect(html).toContain('26 Aug 2026');
+    expect(html).toMatch(/\d{1,2} (Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec) \d{4}/);
     expect(html).not.toMatch(/days ago|Last updated/i);
   });
   it('links the résumé', () => {

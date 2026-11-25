@@ -4,6 +4,5 @@ export const SITE_CONFIG = {
   // Replace with the UC… channel id; the @handle does not work in the RSS endpoint.
   youtubeChannelId: '',
   feedLimit: 3,
-  // No cap: every log entry renders, newest first.
-  logLimit: Number.POSITIVE_INFINITY,
+  homeLogLimit: 6,
 } as const;
