@@ -1,10 +1,9 @@
 ---
 import type { CollectionEntry } from 'astro:content';
 import { formatDate } from '../lib/display.ts';
-import { render } from 'astro:content';
+import { trimDescription } from '../lib/log/description';
 interface Props { entries: CollectionEntry<'log'>[]; total: number }
 const { entries, total } = Astro.props;
-const rendered = await Promise.all(entries.map(async e => ({ e, Content: (await render(e)).Content })));
 ---
 {entries.length > 0 && (
 <section id="log"><img class="log-cat" src="/yuuko-bird-explosion.gif" alt="" aria-hidden="true" width="130" height="304" loading="lazy" decoding="async"/><div class="c">
@@ -14,11 +13,11 @@ const rendered = await Promise.all(entries.map(async e => ({ e, Content: (await 
     <p>Updated whenever something happens. Read, built, learned, watched.</p>
   </div>
   <div class="log">
-    {rendered.map(({ e, Content }) => (
+    {entries.map(e => (
       <div class="li">
         <div class="m"><i>{e.data.kind}</i><span>{formatDate(e.data.date)}</span></div>
         <h4><a href={`/log/${e.id.replace(/\.md$/i, '')}/`}>{e.data.title}</a></h4>
-        <p><Content /></p>
+        <p>{trimDescription(e.data.description ?? e.body ?? '')}</p>
         {e.data.url && <a class="log-source" href={e.data.url} target="_blank" rel="noopener noreferrer">Read original ↗</a>}
       </div>
     ))}
