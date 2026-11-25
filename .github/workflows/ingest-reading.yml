@@ -17,9 +17,10 @@ concurrency:
 jobs:
   publish:
     if: >-
-      github.event.issue.user.login == 'Ansumanbhujabal' &&
       github.event_name == 'issues' &&
-      contains(github.event.issue.labels.*.name, 'reading-link')
+      github.event.issue.user.login == 'Ansumanbhujabal' &&
+      contains(github.event.issue.labels.*.name, 'reading-link') &&
+      (github.event.action == 'opened' || github.event.label.name == 'reading-link')
     runs-on: ubuntu-latest
     outputs:
       commit_sha: ${{ steps.commit.outputs.commit_sha }}
