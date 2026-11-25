@@ -1,4 +1,5 @@
 import type { ExtractedSource } from './extract';
+import { trimDescription } from '../log/description';
 
 export interface GeneratedNote {
   title: string;
@@ -53,7 +54,7 @@ export function fallbackNote(source: ExtractedSource): GeneratedNote {
     : 'Metadata was unavailable for this source when it was logged. Follow the original link to read it directly.';
   const haystack = `${source.title ?? ''} ${source.description ?? ''} ${source.readableText}`.toLowerCase();
   const tags = Object.entries(KEYWORDS).filter(([, needles]) => needles.some(word => haystack.includes(word))).map(([tag]) => tag).slice(0, 6);
-  const description = clean(source.description ?? synopsis).slice(0, 240);
+  const description = trimDescription(source.description ?? synopsis);
   const wordCount = words(synopsis).length;
   return {
     title: humanizedTitle(source),

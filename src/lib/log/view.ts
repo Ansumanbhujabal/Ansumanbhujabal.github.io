@@ -1,5 +1,6 @@
 import type { LogData } from './schema';
 import type { LogView } from './types';
+import { trimDescription } from './description';
 
 interface LogEntryLike {
   id: string;
@@ -27,7 +28,7 @@ export function toLogView(entry: LogEntryLike): LogView {
     kind: data.kind,
     author: data.author ?? null,
     source: data.source ?? domain,
-    description: data.description ?? synopsis,
+    description: trimDescription(data.description ?? synopsis),
     synopsis,
     category: data.category,
     contentType: data.contentType ?? (data.kind === 'watched' ? 'video' : 'article'),

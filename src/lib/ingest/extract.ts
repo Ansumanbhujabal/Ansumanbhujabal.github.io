@@ -38,6 +38,12 @@ export function extractSource(result: SafeFetchResult): ExtractedSource {
   const { document } = dom.window;
   const json = articleJson(document);
   const meta = (selector: string) => clean(document.querySelector<HTMLMetaElement>(selector)?.content);
+  const citationAuthors = [...document.querySelectorAll<HTMLMetaElement>('meta[name="citation_author"]')]
+    .map(node => clean(node.content))
+    .filter((name): name is string => Boolean(name))
+    .map(name => name.includes(',') ? name.split(',').map(part => part.trim()).reverse().join(' ') : name);
+  const citationDate = meta('meta[name="citation_date"]')?.replace(/\//g, '-');
+  const citationAbstract = meta('meta[name="citation_abstract"]');
   const authorObject = json.author && typeof json.author === 'object' ? json.author as Record<string, unknown> : null;
   const readable = new Readability(document.cloneNode(true) as Document).parse();
   const canonical = absolute(clean(document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href), result.finalUrl) ?? result.finalUrl;
@@ -46,12 +52,12 @@ export function extractSource(result: SafeFetchResult): ExtractedSource {
     requestedUrl: result.requestedUrl,
     finalUrl: result.finalUrl,
     canonicalUrl: canonical,
-    title: clean(json.headline) ?? meta('meta[property="og:title"]') ?? clean(readable?.title) ?? clean(document.title),
-    author: clean(authorObject?.name) ?? clean(json.author) ?? meta('meta[name="author"]') ?? clean(readable?.byline),
+    title: clean(json.headline) ?? meta('meta[name="citation_title"]') ?? meta('meta[property="og:title"]') ?? clean(readable?.title) ?? clean(document.title),
+    author: clean(authorObject?.name) ?? clean(json.author) ?? (citationAuthors.length ? citationAuthors.join(', ') : null) ?? meta('meta[name="author"]') ?? clean(readable?.byline),
     source,
-    publishedAt: clean(json.datePublished) ?? meta('meta[property="article:published_time"]'),
-    description: meta('meta[property="og:description"]') ?? meta('meta[name="description"]') ?? clean(readable?.excerpt),
+    publishedAt: clean(json.datePublished) ?? citationDate ?? meta('meta[property="article:published_time"]'),
+    description: meta('meta[property="og:description"]') ?? meta('meta[name="description"]') ?? citationAbstract ?? clean(readable?.excerpt),
     image: absolute(meta('meta[property="og:image"]'), result.finalUrl),
-    readableText: (clean(readable?.textContent) ?? '').slice(0, 20_000),
+    readableText: (citationAbstract ?? clean(readable?.textContent) ?? '').slice(0, 20_000),
   };
 }
