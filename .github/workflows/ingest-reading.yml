@@ -2,7 +2,7 @@ name: Ingest reading link
 
 on:
   issues:
-    types: [opened, labeled]
+    types: [opened]
   schedule:
     - cron: '15 7 * * *'
 
@@ -19,8 +19,7 @@ jobs:
     if: >-
       github.event_name == 'issues' &&
       github.event.issue.user.login == 'Ansumanbhujabal' &&
-      contains(github.event.issue.labels.*.name, 'reading-link') &&
-      (github.event.action == 'opened' || github.event.label.name == 'reading-link')
+      contains(github.event.issue.labels.*.name, 'reading-link')
     runs-on: ubuntu-latest
     outputs:
       commit_sha: ${{ steps.commit.outputs.commit_sha }}
