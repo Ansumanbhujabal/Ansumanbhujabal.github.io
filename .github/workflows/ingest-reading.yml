@@ -17,9 +17,10 @@ concurrency:
 jobs:
   publish:
     if: >-
-      github.event.issue.user.login == 'Ansumanbhujabal' &&
       github.event_name == 'issues' &&
-      contains(github.event.issue.labels.*.name, 'reading-link')
+      github.event.issue.user.login == 'Ansumanbhujabal' &&
+      contains(github.event.issue.labels.*.name, 'reading-link') &&
+      (github.event.action == 'opened' || github.event.label.name == 'reading-link')
     runs-on: ubuntu-latest
     outputs:
       commit_sha: ${{ steps.commit.outputs.commit_sha }}
@@ -101,7 +102,8 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         run: |
           gh issue comment "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --body "Already logged: https://ansumanbhujabal.github.io/log/${{ steps.result.outputs.slug }}/"
-          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label duplicate --state closed
+          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label duplicate
+          gh issue close "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --reason "not planned"
 
       - name: Report failure
         if: failure()
@@ -134,7 +136,8 @@ jobs:
           label=published
           if [ "${{ needs.publish.outputs.generation }}" = fallback ]; then label=published-with-fallback; fi
           gh issue comment "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --body "Published: https://ansumanbhujabal.github.io/log/${{ needs.publish.outputs.slug }}/"
-          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label "$label" --state closed
+          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label "$label"
+          gh issue close "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --reason completed
 
   retry:
     if: github.event_name == 'schedule'
