@@ -18,4 +18,4 @@ export const getStaticPaths = (async () => {
 const { category, entries, allEntries, pageCount } = Astro.props;
 const basePath = `/log/category/${categorySlug(category)}`;
 ---
-<Base title={`${category} Reading — Ansuman SS Bhujabala`} description={`Reading notes categorized under ${category}.`}><Nav /><main class="archive-shell"><header><span class="eyebrow">Category</span><h1 class="disp" id="archive-title">{category}</h1></header><LogArchive entries={entries} allEntries={allEntries} pageCount={pageCount} basePath={basePath} /></main><Footer /></Base>
+<Base title={`${category} Reading — Ansuman SS Bhujabala`} description={`Reading notes categorized under ${category}.`}><Nav /><main class="archive-shell"><header><span class="eyebrow">Category</span><h1 class="disp" id="archive-title">{category}</h1></header><LogArchive entries={entries} allEntries={allEntries} pageCount={pageCount} basePath={basePath} category={category} /></main><Footer /></Base>

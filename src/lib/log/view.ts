@@ -35,5 +35,8 @@ export function toLogView(entry: LogEntryLike): LogView {
     image: data.image ?? null,
     generation: data.generation,
     indexable: data.indexable,
+    modifiedAt: data.modifiedAt ?? null,
+    retryCount: data.retryCount,
+    lastRetryAt: data.lastRetryAt ?? null,
   };
 }

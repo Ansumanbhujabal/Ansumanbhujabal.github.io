@@ -1,11 +1,12 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+const home = Astro.url.pathname === '/';
 ---
 <nav><div class="c nv">
-  <a class="brand" href="#top" aria-label="Back to top">Ansuman</a>
+  <a class="brand" href={home ? '#top' : '/'} aria-label={home ? 'Back to top' : 'Home'}>Ansuman</a>
   <span class="nlinks">
-    <a class="hide" href="#work">Work</a>
-    <a class="hide" href="#log">Log</a>
+    <a class="hide" href={home ? '#work' : '/#work'}>Work</a>
+    <a class="hide" href={home ? '#log' : '/#log'}>Log</a>
     <a class="hide" href="/resume.pdf" target="_blank" rel="noopener noreferrer">Résumé</a>
     <a class="btn" href="mailto:ansumanbhujabal1@gmail.com">Get in touch</a>
     <ThemeToggle />

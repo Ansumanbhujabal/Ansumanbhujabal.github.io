@@ -3,6 +3,8 @@ name: Ingest reading link
 on:
   issues:
     types: [opened, labeled]
+  schedule:
+    - cron: '15 7 * * *'
 
 permissions:
   contents: write
@@ -16,6 +18,7 @@ jobs:
   publish:
     if: >-
       github.event.issue.user.login == 'Ansumanbhujabal' &&
+      github.event_name == 'issues' &&
       contains(github.event.issue.labels.*.name, 'reading-link')
     runs-on: ubuntu-latest
     outputs:
@@ -75,7 +78,7 @@ jobs:
         run: |
           npm test
           npm run build
-          node scripts/check-links.mjs dist/index.html
+          node scripts/check-links.mjs dist
 
       - name: Commit and push entry
         id: commit
@@ -91,16 +94,6 @@ jobs:
           git rebase origin/main
           git push origin HEAD:main
           echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-
-      - name: Report success
-        if: steps.result.outputs.status == 'published'
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          label=published
-          if [ "${{ steps.result.outputs.generation }}" = fallback ]; then label=published-with-fallback; fi
-          gh issue comment "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --body "Published: https://ansumanbhujabal.github.io/log/${{ steps.result.outputs.slug }}/"
-          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label "$label" --state closed
 
       - name: Report duplicate
         if: steps.result.outputs.status == 'duplicate'
@@ -124,6 +117,69 @@ jobs:
     uses: ./.github/workflows/deploy.yml
     with:
       ref: ${{ needs.publish.outputs.commit_sha }}
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+
+  report-published:
+    needs: [publish, deploy]
+    if: needs.publish.outputs.status == 'published' && needs.deploy.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Close published issue
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          label=published
+          if [ "${{ needs.publish.outputs.generation }}" = fallback ]; then label=published-with-fallback; fi
+          gh issue comment "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --body "Published: https://ansumanbhujabal.github.io/log/${{ needs.publish.outputs.slug }}/"
+          gh issue edit "${{ github.event.issue.number }}" --repo "$GITHUB_REPOSITORY" --remove-label processing --add-label "$label" --state closed
+
+  retry:
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    outputs:
+      commit_sha: ${{ steps.commit.outputs.commit_sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Retry fallback notes
+        env:
+          COPILOT_GITHUB_TOKEN: ${{ secrets.COPILOT_GITHUB_TOKEN }}
+        run: |
+          if [ -n "$COPILOT_GITHUB_TOKEN" ]; then npm install -g @github/copilot; fi
+          npm run retry:readings
+      - name: Verify updates
+        run: |
+          npm test
+          npm run build
+          node scripts/check-links.mjs dist
+      - name: Commit updates
+        id: commit
+        run: |
+          git add src/content/log
+          if git diff --cached --quiet; then exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -m "content: refresh fallback reading notes"
+          git fetch origin main
+          git rebase origin/main
+          git push origin HEAD:main
+          echo "commit_sha=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+  deploy-retries:
+    needs: retry
+    if: needs.retry.outputs.commit_sha != ''
+    uses: ./.github/workflows/deploy.yml
+    with:
+      ref: ${{ needs.retry.outputs.commit_sha }}
     permissions:
       contents: write
       pages: write

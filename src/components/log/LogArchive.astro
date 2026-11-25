@@ -8,8 +8,9 @@ interface Props {
   currentPage?: number;
   pageCount?: number;
   basePath?: string;
+  category?: string;
 }
-const { entries, allEntries, currentPage = 1, pageCount = 1, basePath = '/log' } = Astro.props;
+const { entries, allEntries, currentPage = 1, pageCount = 1, basePath = '/log', category } = Astro.props;
 const groups = groupLogsByMonth(entries);
 const counts = [...allEntries.reduce((map, entry) => map.set(entry.category, (map.get(entry.category) ?? 0) + 1), new Map<string, number>())];
 const pageHref = (page: number) => page === 1 ? `${basePath}/` : `${basePath}/page/${page}/`;
@@ -25,7 +26,7 @@ const monthName = (key: string) => new Intl.DateTimeFormat('en', { month: 'long'
     {counts.map(([category, count]) => <a href={`/log/category/${categorySlug(category)}/`}>{category} <span>{count}</span></a>)}
   </nav>
   <p class="log-empty" data-log-empty hidden>No matching entries.</p>
-  <div data-log-results>
+  <div data-log-results data-category={category}>
     {[...groups].map(([month, monthEntries]) => (
       <section class="log-month">
         <h2>{monthName(month)}</h2>
@@ -33,7 +34,7 @@ const monthName = (key: string) => new Intl.DateTimeFormat('en', { month: 'long'
       </section>
     ))}
   </div>
-  <nav class="log-pagination" aria-label="Log pagination">
+  <nav class="log-pagination" data-log-pagination aria-label="Log pagination">
     {currentPage > 1 ? <a href={pageHref(currentPage - 1)}>← Newer</a> : <span />}
     <span>Page {currentPage} of {pageCount}</span>
     {currentPage < pageCount ? <a href={pageHref(currentPage + 1)}>Earlier →</a> : <span />}

@@ -201,3 +201,12 @@ footer{padding:2.2rem 0 3rem}
 .reading-note{display:grid;gap:2rem}.reading-note header{display:grid;gap:.8rem}.reading-note h1{font-size:clamp(2.4rem,7vw,5.5rem);line-height:.95}
 .reading-note-source,.reading-note-disclosure{color:var(--muted)}.reading-note-body{font-size:1.2rem;line-height:1.75}
 .reading-note section{border-top:1px solid var(--line);padding-top:1.5rem}.reading-note-nav{border-top:1px solid var(--line);padding-top:1.5rem;display:flex;justify-content:space-between;gap:2rem}
+
+/* The archive uses the site's existing light and dark theme tokens. */
+.archive-shell .log-archive,.archive-shell .log-month{padding:0;border-bottom:0}
+.log-archive [hidden]{display:none!important}
+.log-toolbar,.log-row,.log-pagination,.reading-note section,.reading-note-nav{border-color:var(--bd)}
+.log-toolbar{background:var(--sf)}
+.log-toolbar input,.log-toolbar select{border-color:var(--bd);background:var(--bg);color:var(--tx)}
+.log-toolbar label,.log-row-meta,.log-row-source,.log-row p,.log-month>h2,.reading-note-source,.reading-note-disclosure{color:var(--mu)}
+.log-categories a,.log-tags span,.log-empty{border-color:var(--bd)}

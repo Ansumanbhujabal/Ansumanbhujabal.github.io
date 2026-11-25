@@ -19,4 +19,7 @@ export interface LogView {
   image: string | null;
   generation: LogGeneration;
   indexable: boolean;
+  modifiedAt: Date | null;
+  retryCount: number;
+  lastRetryAt: Date | null;
 }
