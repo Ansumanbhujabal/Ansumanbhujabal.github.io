@@ -16,6 +16,9 @@ export const logSchema = z.object({
   image: z.string().url().optional(),
   generation: z.enum(['copilot', 'fallback', 'manual']).default('manual'),
   indexable: z.boolean().default(true),
+  modifiedAt: z.coerce.date().optional(),
+  retryCount: z.number().int().min(0).default(0),
+  lastRetryAt: z.coerce.date().optional(),
 });
 
 export type LogData = z.infer<typeof logSchema>;
